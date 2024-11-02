@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Lateral Movement")]
     public float speed, maxForce;
+    public float dashPower, dashCooldownTime;
+    private float dashCooldownCounter;
 
     [Header("Jumping")]
     [SerializeField] private float jumpPower = 500f;
@@ -30,16 +32,26 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Stat Tracking")]
     public TextMeshProUGUI velocityDisplay;
+    public TextMeshProUGUI dashDisplay;
 
     void Update()
     {
+        // Movement
         MovePlayer();
+        //  Dash counter
+        if(dashCooldownCounter > 0)
+        {
+            dashCooldownCounter -= Time.deltaTime;
+            dashCooldownCounter = Mathf.Clamp(dashCooldownCounter, 0f, Mathf.Infinity);
+        }
 
+        // Cursor
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleCursor();
         }
 
+        // UI
         UpdateUI();
     }
 
@@ -62,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateUI()
     {
         velocityDisplay.text = "Velocity: " + string.Format("{0:000.00}", rb.linearVelocity.magnitude);
+        dashDisplay.text = "Dash: " + string.Format("{0:0.00}", dashCooldownCounter);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -78,6 +91,11 @@ public class PlayerMovement : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         Jump();
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        Dash();
     }
 
     private void MovePlayer()
@@ -113,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
                 velChange = new Vector3(velChange.x, 0, velChange.z);
             }
 
-            // Limit Force
+            // Limit Force for safety
             Vector3.ClampMagnitude(velChange, maxForce);
 
             rb.AddForce(velChange * rb.mass * (Time.deltaTime * expectedFramerate), ForceMode.Force);
@@ -127,16 +145,33 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded)
         {
+            // Calculate base force
             Vector3 jumpForce = Vector3.up * jumpPower * rb.mass;
 
+            // If on a slope, jump angle should be relative to the slope's angle
             if (OnSlope())
             {
                 jumpForce = GetSlopeNormal().normalized * jumpPower * rb.mass;
             }
 
-            jumpForce += new Vector3(rb.linearVelocity.normalized.x * jumpSpeed, 0, rb.linearVelocity.normalized.z * jumpSpeed);
+            // Add some extra force in the direction the player is facing
+            jumpForce += transform.forward * rb.mass * jumpSpeed;
 
+            // Apply force
             rb.AddForce(jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    private void Dash()
+    {
+        if (dashCooldownCounter <= 0)
+        {
+            // Add force in the direction the player is facing
+            Vector3 dashForce = dashPower * rb.mass * transform.forward;
+            rb.AddForce(dashForce, ForceMode.Impulse);
+
+            // Reset timer
+            dashCooldownCounter = dashCooldownTime;
         }
     }
 
