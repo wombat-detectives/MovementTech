@@ -104,38 +104,41 @@ public class PlayerMovement : MonoBehaviour
         Vector3 currentVel = rb.linearVelocity;
         Vector3 targetDir = new Vector3(move.x, 0, move.y);
 
-        // Face direction of movement
+        // Only if trying to move
         if (targetDir.magnitude > 0.1f)
         {
+            // Face direction based on camera
             float targetAngle = Mathf.Atan2(targetDir.x, targetDir.z) * Mathf.Rad2Deg + PlayerCamera.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(rb.rotation.eulerAngles.y, targetAngle, ref turnSmoothVel, turnSmoothTime);
             rb.rotation = Quaternion.Euler(0, angle, 0);
 
+            // Calculate move direction based on camera-facing angle
             moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-            Vector3 velChange;
             if (OnSlope())
             {
-                moveDir = GetSlopeMoveDirection() * speed;
-
-                // Calculate Forces
-                velChange = moveDir - currentVel;
-                velChange = new Vector3(velChange.x, velChange.y, velChange.z);
+                // Move relative to slope while on one
+                moveDir = GetSlopeMoveDirection().normalized;
             }
             else
             {
-                moveDir = moveDir.normalized * speed;
-
-                // Calculate Forces
-                velChange = moveDir - currentVel;
-                velChange = new Vector3(velChange.x, 0, velChange.z);
+                moveDir = moveDir.normalized;
             }
 
-            // Limit Force for safety
-            Vector3.ClampMagnitude(velChange, maxForce);
+            // Calculate the target velocity based on desired direction and current speed
+            float currentSpeed = currentVel.magnitude;
+            Vector3 targetVelocity = moveDir * Mathf.Max(speed, currentSpeed);  // Maintain current speed or target speed, whichever is higher
 
+            // Calculate the force needed to gradually steer towards the target velocity
+            Vector3 velChange = targetVelocity - currentVel;
+
+            // Apply a consistent steering force without abrupt acceleration, clamped by maxForce
+            velChange = Vector3.ClampMagnitude(velChange, maxForce);
+
+            // Apply the force for smooth movement and direction control
             rb.AddForce(velChange * rb.mass * (Time.deltaTime * expectedFramerate), ForceMode.Force);
-        } else
+        }
+        else
         {
             moveDir = Vector3.zero;
         }

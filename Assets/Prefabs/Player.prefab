@@ -103,7 +103,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1931960186119561577}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -127,13 +127,13 @@ MonoBehaviour:
   PlayerCamera: {fileID: 0}
   rb: {fileID: 6988163145353085579}
   PlayerModel: {fileID: 6136400925209057371}
-  turnSmoothTime: 0.1
+  turnSmoothTime: 0.06
   speed: 25
   maxForce: 15000
   dashPower: 8
   dashCooldownTime: 2
   jumpPower: 3
-  jumpSpeed: 5
+  jumpSpeed: 3
   maxSlopeAngle: 50
   slopeRaycastSize: 1.3
   velocityDisplay: {fileID: 0}
