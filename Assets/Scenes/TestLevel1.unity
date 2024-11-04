@@ -15978,6 +15978,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 3118084739728364948, guid: 7a9a4953d0f708e418e92a6b0c9489b3, type: 3}
+      propertyPath: slideForce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118084739728364948, guid: 7a9a4953d0f708e418e92a6b0c9489b3, type: 3}
       propertyPath: slideFriction
       value: 0.15
       objectReference: {fileID: 0}

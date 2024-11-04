@@ -155,11 +155,10 @@ MonoBehaviour:
   playerObj: {fileID: 6136400925209057371}
   orientation: {fileID: 1849619983254424914}
   maxSlideTime: 2
-  slideForce: 3
+  slideForce: 5
   slideDownForce: 2
-  slideFriction: 0.2
+  slideFriction: 0.15
   slideYScale: 0.5
-  slideKey: 306
   sliding: 0
 --- !u!54 &6988163145353085579
 Rigidbody:
