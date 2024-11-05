@@ -24,11 +24,7 @@ public class Sliding : MonoBehaviour
     private float startYScale;
 
     [Header("Input")]
-    private Vector2 move;
     private bool isCrouching;
-
-    [HideInInspector]
-    public bool sliding = false;
 
     private void Start()
     {
@@ -40,17 +36,12 @@ public class Sliding : MonoBehaviour
         startFriction = coll.material.dynamicFriction;
     }
 
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        move = context.ReadValue<Vector2>();
-    }
-
     public void OnCrouch(InputAction.CallbackContext context)
     {
         float val = context.ReadValue<float>();
         isCrouching = val > 0;
 
-        if (move.x != 0 || move.y != 0)
+        if (pm.move.x != 0 || pm.move.y != 0)
         {
             StartSlide();
         }
@@ -58,7 +49,7 @@ public class Sliding : MonoBehaviour
 
     private void Update()
     {
-        if(!isCrouching && sliding)
+        if(!isCrouching && pm.sliding)
         {
             StopSlide();
         }
@@ -66,15 +57,15 @@ public class Sliding : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (sliding)
+        if (pm.sliding)
         {
-            NewSlidingMovement();
+            SlidingMovement();
         }
     }
 
     private void StartSlide()
     {
-        sliding = true;
+        pm.sliding = true;
 
         playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
         rb.AddForce(Vector3.down * slideDownForce * rb.mass, ForceMode.Impulse);
@@ -87,35 +78,7 @@ public class Sliding : MonoBehaviour
 
     private void SlidingMovement()
     {
-        Vector3 inputDirection = orientation.forward * move.y + orientation.right * move.x;
-
-        // Normal Slide
-        if((!pm.OnSlope() && !pm.OnSteepSlope()) || rb.linearVelocity.y > -0.1f)
-        {
-            rb.AddForce(inputDirection.normalized * slideForce * 0.5f * rb.mass, ForceMode.Force);
-
-            slideTimer -= Time.deltaTime;
-        }
-        // Sliding down a slope
-        else if (pm.OnSlope())
-        {
-            rb.AddForce(pm.GetSlopeMoveDirection() * slideForce * rb.mass, ForceMode.Force);
-        } 
-        // Sliding down a steep slope
-        else if (pm.OnSteepSlope())
-        {
-            rb.AddForce(pm.GetSlopeMoveDirection() * slideForce * 2f * rb.mass, ForceMode.Force);
-        }
-
-        if(slideTimer <= 0)
-        {
-            StopSlide();
-        }
-    }
-
-    private void NewSlidingMovement()
-    {
-        Vector3 inputDirection = orientation.forward * move.y + orientation.right * move.x;
+        Vector3 inputDirection = orientation.forward * pm.move.y + orientation.right * pm.move.x;
 
         // Normal Slide
         if ((!pm.OnSlope() && !pm.OnSteepSlope()) || rb.linearVelocity.y > -0.1f)
@@ -145,7 +108,7 @@ public class Sliding : MonoBehaviour
 
     private void StopSlide()
     {
-        sliding = false;
+        pm.sliding = false;
 
         playerObj.localScale = new Vector3(playerObj.localScale.x, startYScale, playerObj.localScale.z);
 
