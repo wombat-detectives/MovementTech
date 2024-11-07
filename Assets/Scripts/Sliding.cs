@@ -52,7 +52,7 @@ public class Sliding : MonoBehaviour
         if(!isCrouching && pm.sliding)
         {
             StopSlide();
-        }
+        }    
     }
 
     private void FixedUpdate()

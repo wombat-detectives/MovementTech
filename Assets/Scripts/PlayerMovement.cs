@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 move;
     private Vector3 moveDir;
     private float turnSmoothVel;
-    private float expectedFramerate = 60f;
+    public readonly float expectedFramerate = 60f;
     private Sliding slideController;
 
     [Header("Setup Fields")]
@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Lateral Movement")]
     private float speed;
-    public float maxForce, walkSpeed, airSpeed, climbSpeed, groundDrag, dashPower, dashCooldownTime;
+    public float maxForce, walkSpeed, airSpeed, climbSpeed, wallrunSpeed, groundDrag, dashPower, dashCooldownTime;
     private float dashCooldownTimer;
 
     [Header("Jumping")]
@@ -43,22 +43,33 @@ public class PlayerMovement : MonoBehaviour
     public TextMeshProUGUI velocityDisplay;
     public TextMeshProUGUI dashDisplay;
 
-    public MovementState state;
+    [Header("References")]
+    public Climbing climbingScript;
+
+    [HideInInspector] public MovementState state;
     public enum MovementState
     {
         walking,
         air,
         sliding,
-        climbing
+        climbing,
+        wallrunning
     }
 
-    public bool sliding;
-    public bool climbing;
+    [HideInInspector] public bool sliding;
+    [HideInInspector] public bool climbing;
+    [HideInInspector] public bool wallrunning;
 
     private void StateHandler()
     {
+        // wallrunning
+        if(wallrunning)
+        {
+            state = MovementState.wallrunning;
+            speed = wallrunSpeed;
+        }
         // climbing
-        if (climbing)
+        else if (climbing)
         {
             state = MovementState.climbing;
             speed = climbSpeed;
@@ -88,30 +99,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
-        // Movement
-        MovePlayer();
         StateHandler();
 
         // Ground check
         grounded = Physics.Raycast(rb.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
-        // Extra Gravity
-        if(!grounded)
-        {
-            rb.AddForce(Vector3.down * extraGravity * (Time.deltaTime * expectedFramerate), ForceMode.Force);
-        }
-
         //  Dash timer
-        if(dashCooldownTimer > 0)
+        if (dashCooldownTimer > 0)
         {
             dashCooldownTimer -= Time.deltaTime;
             dashCooldownTimer = Mathf.Clamp(dashCooldownTimer, 0f, Mathf.Infinity);
         }
 
         // when to jump
-        if(jumpInput > 0 && readyToJump && grounded){
+        if (jumpInput > 0 && readyToJump && grounded)
+        {
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
@@ -125,6 +129,18 @@ public class PlayerMovement : MonoBehaviour
 
         // UI
         UpdateUI();
+    }
+
+    void FixedUpdate()
+    {
+        // Movement
+        MovePlayer();
+
+        // Extra Gravity
+        if(!grounded && rb.useGravity)
+        {
+            rb.AddForce(Vector3.down * extraGravity * (Time.deltaTime * expectedFramerate), ForceMode.Force);
+        }
     }
 
     private void Start()
@@ -171,6 +187,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        if (climbingScript.exitingWall) return;
+
         // Find Target Velocity
         Vector3 currentVel = rb.linearVelocity;
         Vector3 targetDir = new Vector3(move.x, 0, move.y);

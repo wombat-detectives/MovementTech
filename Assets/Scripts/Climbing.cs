@@ -21,6 +21,9 @@ public class Climbing : MonoBehaviour
     public int climbJumps;
     private int climbJumpsLeft;
 
+    public int spamJumps;
+    private int spamJumpsLeft;
+
     [Header("Detection")]
     public float detectionLength;
     public float sphereCastRadius;
@@ -34,24 +37,46 @@ public class Climbing : MonoBehaviour
     private Vector3 lastWallNormal;
     public float minWallNormalAngleChange;
 
+    [Header("Exiting")]
+    public bool exitingWall;
+    public float exitWallTime;
+    private float exitWallTimer;
+
     void Update()
     {
         WallCheck();
-        StateMachine();
+        StateMachine(); 
+    }
 
-        if (pm.climbing) ClimbingMovement();
+    private void FixedUpdate()
+    {
+        if (pm.climbing && !exitingWall) ClimbingMovement();
     }
 
     private void StateMachine()
     {
         // State 1 - Climbing
-        if(wallFront && pm.move.y > 0 && wallLookAngle < maxWallLookAngle)
+        if(wallFront && pm.move.y > 0 && wallLookAngle < maxWallLookAngle && !exitingWall)
         {
             if(!pm.climbing && climbTimer > 0) StartClimbing();
 
             // timer
-            if(climbTimer >= 0) climbTimer -= Time.deltaTime;
-            if(climbTimer < 0) StopClimbing();
+            if(climbTimer > 0) climbTimer -= Time.deltaTime;
+            if(climbTimer <= 0) StopClimbing();
+        }
+
+        // State 2 - Exiting Wall
+        else if (exitingWall)
+        {
+            if (pm.climbing) StopClimbing();
+
+            if(exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
+            if (exitWallTimer <= 0)
+            {
+                spamJumpsLeft = spamJumps;
+                exitingWall = false;
+            }
+
         }
 
         // State 3 - None
@@ -97,11 +122,22 @@ public class Climbing : MonoBehaviour
 
     private void ClimbJump()
     {
+        if (exitingWall && spamJumpsLeft > 0)
+        {
+            spamJumpsLeft--;
+        } else if(exitingWall)
+        {
+            return;
+        }
+
         Vector3 forceToApply = transform.up * climbJumpUpForce * rb.mass + frontWallHit.normal * climbJumpBackForce * rb.mass;
 
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         rb.AddForce(forceToApply, ForceMode.Impulse);
 
         climbJumpsLeft--;
+
+        exitingWall = true;
+        exitWallTimer = exitWallTime;
     }
 }
