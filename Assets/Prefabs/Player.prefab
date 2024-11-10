@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3118084739728364948}
   - component: {fileID: 7194492640274213366}
   - component: {fileID: 1237584397742812850}
+  - component: {fileID: 2104531884959928432}
   - component: {fileID: 6988163145353085579}
   - component: {fileID: 2555872470627461972}
   m_Layer: 3
@@ -55,7 +56,7 @@ MonoBehaviour:
   rb: {fileID: 6988163145353085579}
   PlayerModel: {fileID: 6136400925209057371}
   turnSmoothTime: 0.06
-  extraGravity: 20
+  extraGravity: 50
   maxForce: 15000
   walkSpeed: 20
   airSpeed: 15
@@ -119,7 +120,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   climbSpeed: 10
-  maxClimbTime: 1
+  maxClimbTime: 0.75
   climbJumpUpForce: 12
   climbJumpBackForce: 7
   climbJumps: 1
@@ -129,7 +130,7 @@ MonoBehaviour:
   maxWallLookAngle: 30
   minWallNormalAngleChange: 5
   exitingWall: 0
-  exitWallTime: 0.1
+  exitWallTime: 0.2
 --- !u!114 &1237584397742812850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,14 +152,32 @@ MonoBehaviour:
   wallRunForce: 20
   wallJumpUpForce: 7
   wallJumpSideForce: 12
-  maxWallRunTime: 3
+  maxWallRunTime: 2
   useGravity: 0
   gravityCounterForce: 50
   wallCheckDistance: 0.7
   minJumpHeight: 2
-  minWallNormalAngleChange: 0
-  exitWallTime: 0.1
+  minWallNormalAngleChange: 45
+  exitWallTime: 0.2
   orientation: {fileID: 1849619983254424914}
+--- !u!114 &2104531884959928432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931960186119561577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0bffa211a9e05c4a9b42151c71bee73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whatIsProp: Prop
+  grabRange: 5
+  heldPropPosition: {x: 0, y: 2, z: 0}
+  heldPropRotation: {x: 0, y: 0, z: 0, w: 0}
+  propThrowForce: 20
+  dropPropPosition: {x: 0, y: 1.5, z: 2.5}
 --- !u!54 &6988163145353085579
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -225,9 +244,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3118084739728364948}
-        m_TargetAssemblyTypeName: Sliding, Assembly-CSharp
-        m_MethodName: OnMove
+    m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6b444451-8a00-4d00-a97e-f47457f736a8
+    m_ActionName: 'Player/Look[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2104531884959928432}
+        m_TargetAssemblyTypeName: PropGrabbing, Assembly-CSharp
+        m_MethodName: OnLClick
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -237,14 +264,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
-    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 6b444451-8a00-4d00-a97e-f47457f736a8
-    m_ActionName: 'Player/Look[/Mouse/delta]'
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 6c2ab1b8-8984-453a-af3d-a3c78ae1679a
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
@@ -347,6 +366,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2104531884959928432}
+        m_TargetAssemblyTypeName: PropGrabbing, Assembly-CSharp
+        m_MethodName: OnRClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1a30ca35-fc09-4e19-989d-68c828ca2d65
+    m_ActionName: Player/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -452,7 +487,7 @@ GameObject:
   - component: {fileID: 1085610469374863953}
   m_Layer: 3
   m_Name: Sides
-  m_TagString: PlayerHitbox
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
