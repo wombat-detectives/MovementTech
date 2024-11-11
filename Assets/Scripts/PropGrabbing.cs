@@ -37,7 +37,6 @@ public class PropGrabbing : MonoBehaviour
     {
         if (context.performed)
         {
-            Debug.Log("rckicl");
             TryPickupDrop();
         }
             
