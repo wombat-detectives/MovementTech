@@ -21,6 +21,10 @@ public class WallRunning : MonoBehaviour
     private bool wallLeft;
     private bool wallRight;
 
+    public float minWallNormalAngleChange;
+    private Transform lastWall;
+    private Vector3 lastWallNormal;
+
     [Header("Exiting")]
     private bool exitingWall;
     public float exitWallTime;
@@ -57,6 +61,19 @@ public class WallRunning : MonoBehaviour
     {
         wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallCheckDistance, whatIsWall);
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, whatIsWall);
+
+        // Stamina system, modified from climbing script
+        bool wallNear = wallLeft || wallRight;
+        Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
+
+        RaycastHit currWallHit = wallRight ? rightWallHit : leftWallHit;
+
+        bool newWall = currWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, wallNormal)) > minWallNormalAngleChange;
+
+        if ((wallNear && newWall) || pm.grounded)
+        {
+            wallRunTimer = maxWallRunTime;
+        }
     }
 
     private bool AboveGround()
@@ -68,7 +85,7 @@ public class WallRunning : MonoBehaviour
     {
 
         // State 1 - Wallrunning
-        if ((wallLeft || wallRight) && pm.move.y > 0 && AboveGround() && !exitingWall)
+        if ((wallLeft || wallRight) && pm.move.y > 0 && AboveGround() && !exitingWall && wallRunTimer > 0)
         {
             if (!pm.wallrunning)
                 StartWallRun();
@@ -114,7 +131,8 @@ public class WallRunning : MonoBehaviour
     {
         pm.wallrunning = true;
 
-        wallRunTimer = maxWallRunTime;
+        lastWall = wallRight ? rightWallHit.transform : leftWallHit.transform;
+        lastWallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
 
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
     }
