@@ -7,6 +7,9 @@ TagManager:
   - Coin
   - PlayerHitbox
   - Prop
+  - Grass
+  - Brick
+  - Wood
   layers:
   - Default
   - TransparentFX
