@@ -41,7 +41,6 @@ public class PlayerAnimation : MonoBehaviour
 
         if (hit.collider != null)
         {
-            Debug.Log(hit.collider.tag);
             return hit.collider.tag;
         }
         else
