@@ -3,18 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Coin
+  - PlayerHitbox
+  - Prop
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - WhatIsGround
   - WhatIsWall
   - ClippableWall
-  - 
+  - Pickupable
   - 
   - 
   - 
