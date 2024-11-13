@@ -41,7 +41,7 @@ public class Sliding : MonoBehaviour
         float val = context.ReadValue<float>();
         isCrouching = val > 0;
 
-        if (pm.move.x != 0 || pm.move.y != 0)
+        if (isCrouching)
         {
             StartSlide();
         }
@@ -83,7 +83,18 @@ public class Sliding : MonoBehaviour
         // Normal Slide
         if ((!pm.OnSlope() && !pm.OnSteepSlope()) || rb.linearVelocity.y > -0.1f)
         {
-            rb.AddForce(inputDirection.normalized * slideForce * 0.1f * rb.mass, ForceMode.Force);
+            if(pm.grounded && rb.linearVelocity.magnitude < 5f)
+            {
+                rb.AddForce(inputDirection.normalized * slideForce * rb.mass, ForceMode.Force);
+            } else if(pm.move.y < 0)
+            {
+                rb.AddForce(inputDirection.normalized * slideForce * 0.75f * rb.mass, ForceMode.Force);
+            }
+            else
+            {
+                rb.AddForce(inputDirection.normalized * slideForce * 0.25f * rb.mass, ForceMode.Force);
+            }
+            
         }
         // Sliding down a slope
         else
