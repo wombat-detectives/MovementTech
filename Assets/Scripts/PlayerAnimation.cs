@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
@@ -7,14 +6,14 @@ public class PlayerAnimation : MonoBehaviour
     private PlayerMovement pm;
     private Rigidbody rb;
     private Animator anim;
-    private PlayerAudio audio;
+    private PlayerAudio stepAudio;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
-        audio = GetComponent<PlayerAudio>();
+        stepAudio = GetComponent<PlayerAudio>();
     }
 
     void Update()
@@ -24,7 +23,7 @@ public class PlayerAnimation : MonoBehaviour
             PlayerAudio.footstepTypes ground;
             Enum.TryParse(groundType(), out ground);
 
-            audio.setFootstepType(ground);
+            stepAudio.setFootstepType(ground);
             anim.speed = rb.linearVelocity.magnitude/ 9f;
             anim.SetBool("isWalking", true);
         } else

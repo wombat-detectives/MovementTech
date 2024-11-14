@@ -47,6 +47,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Camera Effects
+    uniqueID: 565422407
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
