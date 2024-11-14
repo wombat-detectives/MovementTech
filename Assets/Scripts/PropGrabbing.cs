@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,9 +21,14 @@ public class PropGrabbing : MonoBehaviour
     public Vector3 dropPropPosition;
     private Rigidbody playerRB;
 
+    [Header("Jank Launch")]
+    public float launchForce = 25f;
+    private PlayerMovement pm;
+
     private void Start()
     {
         playerRB = GetComponent<Rigidbody>();
+        pm = GetComponent<PlayerMovement>();
     }
 
     public void OnLClick(InputAction.CallbackContext context)
@@ -62,13 +66,22 @@ public class PropGrabbing : MonoBehaviour
         //Drop prop if one is held
         else if (isHoldingProp)
         {
-            DropProp();
+            // normal drop
+            if(!pm.sliding)
+                DropProp();
+            // perform jank launch while sliding
+            else
+            {
+                DropProp(true);
+                JankLaunch();
+            }
+            
         }
     }
 
     void Update()
     {
-        //Lock prop position above player while held
+        //Lock prop position while held
         if (isHoldingProp)
         {
             HoldingProp();
@@ -149,7 +162,7 @@ public class PropGrabbing : MonoBehaviour
         isHoldingProp = false;
         heldProp.transform.parent = null;
         heldPropRB.linearVelocity = playerRB.linearVelocity;
-        heldPropRB. angularVelocity = playerRB.angularVelocity;
+        heldPropRB.angularVelocity = playerRB.angularVelocity;
         heldPropRB.AddForce(transform.forward * propThrowForce, ForceMode.Impulse);
 
         heldProp = null;
@@ -160,15 +173,24 @@ public class PropGrabbing : MonoBehaviour
         audioSrc.Play();*/
     }
 
-    private void DropProp()
+    private void DropProp(bool jank = false)
     {
         //if a prop is held, drop it in front of the player
         isHoldingProp = false;
-        heldProp.transform.localPosition = dropPropPosition;
+        if (!jank)
+            heldProp.transform.localPosition = dropPropPosition;
+        else
+            heldProp.transform.localPosition = Vector3.zero;
         heldPropRB.linearVelocity = Vector3.zero;
+        heldPropRB.angularVelocity = playerRB.angularVelocity;
         heldProp.transform.parent = null;
 
         heldProp = null;
         heldPropRB = null;
+    }
+
+    private void JankLaunch()
+    {
+        playerRB.AddForce(Vector3.up * playerRB.mass * launchForce, ForceMode.Impulse);
     }
 }

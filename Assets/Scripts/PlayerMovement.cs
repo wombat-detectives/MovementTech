@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpSpeed = 1f;
     [SerializeField] private float jumpCooldown = .15f;
     private bool readyToJump;
-    public float jumpInput;
+    [HideInInspector] public float jumpInput;
 
     [Header("Ground Check")]
     public float playerHeight;
