@@ -68,7 +68,7 @@ MonoBehaviour:
   groundDrag: 4
   dashPower: 6
   dashCooldownTime: 2
-  jumpPower: 10
+  jumpPower: 15
   jumpSpeed: 2
   jumpCooldown: 0.25
   jumpInput: 0
@@ -177,10 +177,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whatIsProp: Prop
   grabRange: 5
-  heldPropPosition: {x: 0, y: 2, z: 0}
+  heldPropPosition: {x: 0, y: 0.5, z: 1.2}
   heldPropRotation: {x: 0, y: 0, z: 0, w: 0}
   propThrowForce: 20
-  dropPropPosition: {x: 0, y: 1.5, z: 2.5}
+  dropPropPosition: {x: 0, y: 0.5, z: 1.2}
+  launchForce: 25
 --- !u!114 &4546109906400959745
 MonoBehaviour:
   m_ObjectHideFlags: 0
