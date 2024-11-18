@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerAudio : MonoBehaviour
+public class FootstepAudio : MonoBehaviour
 {
 
     public float volume;

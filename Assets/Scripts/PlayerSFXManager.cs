@@ -1,26 +1,26 @@
 using System;
 using UnityEngine;
 
-public class PlayerAnimation : MonoBehaviour
+public class PlayerSFXManager : MonoBehaviour
 {
     private PlayerMovement pm;
     private Rigidbody rb;
     private Animator anim;
-    private PlayerAudio stepAudio;
+    private FootstepAudio stepAudio;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
         anim = GetComponent<Animator>();
-        stepAudio = GetComponent<PlayerAudio>();
+        stepAudio = GetComponent<FootstepAudio>();
     }
 
     void Update()
     {
         if (pm.state == PlayerMovement.MovementState.walking && rb.linearVelocity.magnitude > 1)
         {
-            PlayerAudio.footstepTypes ground;
+            FootstepAudio.footstepTypes ground;
             Enum.TryParse(groundType(), out ground);
 
             stepAudio.setFootstepType(ground);
