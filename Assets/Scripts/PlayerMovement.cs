@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Lateral Movement")]
     private float speed;
-    public float maxForce, walkSpeed, airSpeed, climbSpeed, wallrunSpeed, groundDrag, dashPower, dashCooldownTime;
+    public float maxForce, walkSpeed, airSpeed, maxAirSpeedMod, climbSpeed, wallrunSpeed, groundDrag, dashPower, dashCooldownTime;
     private float dashCooldownTimer;
 
     [Header("Jumping")]
@@ -239,7 +239,9 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 // Calculate the target velocity based on desired direction and current speed
-                float currentSpeed = currentVel.magnitude;
+                Vector3 horizVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                float currentSpeed = horizVel.magnitude;
+                
                 Vector3 targetVelocity = moveDir * Mathf.Max(speed, currentSpeed);  // Maintain current speed or target speed, whichever is higher
 
                 // Calculate the force needed to gradually steer towards the target velocity
@@ -258,6 +260,12 @@ public class PlayerMovement : MonoBehaviour
                 if (grounded)
                 {
                     velChange *= rb.linearDamping;
+                }
+
+                // half force when above target speed
+                if(currentSpeed > airSpeed)
+                {
+                    velChange *= maxAirSpeedMod;
                 }
 
                 // Apply the force for smooth movement and direction control

@@ -12,7 +12,7 @@ public class PlayerSFXManager : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         stepAudio = GetComponent<FootstepAudio>();
     }
 
