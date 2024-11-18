@@ -22,7 +22,7 @@ public class PlayerAudio : MonoBehaviour
 
     public void playFootstep()
     {
-        SFXManager.instance.PlayRandomSFXClip(activeFootsteps, transform, volume);
+        //SFXManager.instance.PlayRandomSFXClip(activeFootsteps, transform, volume);
     }
 
     public void setFootstepType(footstepTypes footstepType)
