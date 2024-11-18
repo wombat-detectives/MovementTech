@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SFXManager : MonoBehaviour
 {
@@ -7,11 +8,39 @@ public class SFXManager : MonoBehaviour
 
     [SerializeField] private AudioSource soundFXObject;
 
+    [Header("Music")]
+    [SerializeField] private bool playMusic;
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioClip musicClip;
+
     private void Awake()
     {
         if(instance == null) {
             instance = this;
         }
+    }
+
+    private void Start()
+    {
+        if (playMusic)
+            PlayMusic();
+    }
+
+    private void PlayMusic()
+    {
+        //spawn in GameObject
+        AudioSource audioSrc = Instantiate(musicSource, Vector3.zero, Quaternion.identity);
+
+        // parent to camera
+        audioSrc.transform.parent = FindFirstObjectByType<Camera>().transform;
+        audioSrc.transform.localPosition = Vector3.zero;
+
+        //assign properties and play
+        audioSrc.clip = musicClip;
+        audioSrc.Play();
+
+        //loop
+        audioSrc.loop = true;
     }
 
     public void PlaySFXClip(AudioClip clip, Transform spawnTransform, float volume)
