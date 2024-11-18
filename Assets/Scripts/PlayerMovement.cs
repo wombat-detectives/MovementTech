@@ -1,8 +1,9 @@
+using System.Diagnostics;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using Debug = UnityEngine.Debug;
 public class PlayerMovement : MonoBehaviour
 {
     public Vector2 move;
@@ -10,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private float turnSmoothVel;
     public readonly float expectedFramerate = 60f;
     private Sliding slideController;
+    [SerializeField] private PlayerAnimations playerAnimation;
 
     [Header("Setup Fields")]
     [SerializeField] private Transform PlayerCamera;
@@ -53,7 +55,8 @@ public class PlayerMovement : MonoBehaviour
         air,
         sliding,
         climbing,
-        wallrunning
+        wallrunning,
+        notMoving
     }
 
     [HideInInspector] public bool sliding;
@@ -67,12 +70,14 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.wallrunning;
             speed = wallrunSpeed;
+            playerAnimation.PlayWallrunAnimation();
         }
         // climbing
         else if (climbing)
         {
             state = MovementState.climbing;
             speed = climbSpeed;
+            playerAnimation.PlayClimbAnimation();
         }
 
         // sliding
@@ -80,14 +85,24 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sliding;
             rb.linearDamping = 0;
+            playerAnimation.PlaySlideAnimation();
+        }
+        else if (grounded && move.magnitude <= 0.1f)
+        {
+            state = MovementState.notMoving;
+            speed = 0f; 
+            rb.linearDamping = groundDrag; 
+            playerAnimation.PlayIdleAnimation(); 
         }
 
         // walking
         else if (grounded)
         {
+            Debug.Log("Running");
             state = MovementState.walking;
             speed = walkSpeed;
             rb.linearDamping = groundDrag;
+            playerAnimation.PlayRunAnimation();
         }
 
         // air
@@ -96,6 +111,7 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.air;
             speed = airSpeed;
             rb.linearDamping = 0;
+            
         }
     }
 
@@ -119,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
+            playerAnimation.PlayAirAnimation();
         }
 
         // Cursor
@@ -166,12 +183,17 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 horizVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
-        velocityDisplay.text = "Velocity: " + string.Format("{0:000.00}", horizVel.magnitude);
-        dashDisplay.text = "Dash: " + string.Format("{0:0.00}", dashCooldownTimer);
+        if(velocityDisplay != null && dashDisplay != null)
+        {
+            velocityDisplay.text = "Velocity: " + string.Format("{0:000.00}", horizVel.magnitude);
+            dashDisplay.text = "Dash: " + string.Format("{0:0.00}", dashCooldownTimer);
+        }
+       
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
+     
         move = context.ReadValue<Vector2>();
     }
 
