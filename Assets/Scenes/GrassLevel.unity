@@ -4441,6 +4441,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 25039858}
+    - target: {fileID: 3827139499015670558, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c31b13ea1337a28439820ef3fad959ce, type: 2}
     - target: {fileID: 4682949123894341925, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -6098,6 +6102,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1104209745}
+    - target: {fileID: 3827139499015670558, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c31b13ea1337a28439820ef3fad959ce, type: 2}
     - target: {fileID: 4682949123894341925, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -10108,6 +10116,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1544132284}
+    - target: {fileID: 3827139499015670558, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c31b13ea1337a28439820ef3fad959ce, type: 2}
     - target: {fileID: 4682949123894341925, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -26914,6 +26926,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1332747846}
+    - target: {fileID: 3827139499015670558, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c31b13ea1337a28439820ef3fad959ce, type: 2}
     - target: {fileID: 4682949123894341925, guid: 717ca67a6c951784491d69f2abb89394, type: 3}
       propertyPath: m_Mesh
       value: 
