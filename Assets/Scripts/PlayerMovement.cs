@@ -7,6 +7,7 @@ using Debug = UnityEngine.Debug;
 public class PlayerMovement : MonoBehaviour
 {
     public Vector2 move;
+    [HideInInspector] public bool canMove = true;
     private Vector3 moveDir;
     private float turnSmoothVel;
     public readonly float expectedFramerate = 60f;
@@ -151,7 +152,8 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // Movement
-        MovePlayer();
+        if(canMove)
+            MovePlayer();
 
         // Extra Gravity
         if(!grounded && rb.useGravity)

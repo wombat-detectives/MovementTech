@@ -163,7 +163,7 @@ public class PropGrabbing : MonoBehaviour
         heldProp.transform.parent = null;
         heldPropRB.linearVelocity = playerRB.linearVelocity;
         heldPropRB.angularVelocity = playerRB.angularVelocity;
-        heldPropRB.AddForce(transform.forward * propThrowForce, ForceMode.Impulse);
+        heldPropRB.AddForce(transform.forward * propThrowForce * heldPropRB.mass, ForceMode.Impulse);
 
         heldProp = null;
         heldPropRB = null;

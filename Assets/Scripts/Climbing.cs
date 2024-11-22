@@ -75,6 +75,7 @@ public class Climbing : MonoBehaviour
             {
                 spamJumpsLeft = spamJumps;
                 exitingWall = false;
+                pm.canMove = true;
             }
 
         }
@@ -83,6 +84,7 @@ public class Climbing : MonoBehaviour
         else
         {
             if(pm.climbing) StopClimbing();
+            if (!pm.canMove) pm.canMove = true;
         }
 
         if (wallFront && pm.jumpInput > 0 && climbJumpsLeft > 0) ClimbJump();
@@ -118,6 +120,7 @@ public class Climbing : MonoBehaviour
     private void StopClimbing()
     {
         pm.climbing = false;
+        pm.canMove = false;
     }
 
     private void ClimbJump()

@@ -55,6 +55,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
+  canMove: 1
   playerAnimation: {fileID: 6317664578582892889}
   PlayerCamera: {fileID: 0}
   rb: {fileID: 6988163145353085579}
@@ -63,8 +64,8 @@ MonoBehaviour:
   extraGravity: 50
   maxForce: 15000
   walkSpeed: 20
-  airSpeed: 15
-  maxAirSpeedMod: 0.4
+  airSpeed: 10
+  maxAirSpeedMod: 0.5
   climbSpeed: 10
   wallrunSpeed: 15
   groundDrag: 4
@@ -164,7 +165,7 @@ MonoBehaviour:
   wallCheckDistance: 0.7
   minJumpHeight: 2
   minWallNormalAngleChange: 45
-  exitWallTime: 0.2
+  exitWallTime: 0.5
   orientation: {fileID: 1849619983254424914}
 --- !u!114 &2104531884959928432
 MonoBehaviour:
@@ -808,9 +809,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 225db44b5345d264e94fb763b72682b0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 105197079658937401}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 225db44b5345d264e94fb763b72682b0, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6317664578582892889}
   m_SourcePrefab: {fileID: 100100000, guid: 225db44b5345d264e94fb763b72682b0, type: 3}
 --- !u!1 &5176652850616544863 stripped
@@ -818,29 +816,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 225db44b5345d264e94fb763b72682b0, type: 3}
   m_PrefabInstance: {fileID: 5410586248535216910}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &105197079658937401
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5176652850616544863}
-  m_Material: {fileID: 13400000, guid: 0ded37350daf852478652176a5a3e509, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.69, z: 0}
 --- !u!114 &6317664578582892889
 MonoBehaviour:
   m_ObjectHideFlags: 0
