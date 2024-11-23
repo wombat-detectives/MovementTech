@@ -122,12 +122,14 @@ public class PropGrabbing : MonoBehaviour
             heldPropRB = heldProp.GetComponent<Rigidbody>();
         }
 
-        //Assign heldProp as child of player
-        heldProp.transform.parent = transform;
+        if (heldProp != null)
+        {
+            //Assign heldProp as child of player
+            heldProp.transform.parent = transform;
 
-        //Make prop appear above player
-        heldProp.transform.localPosition = heldPropPosition;
-
+            //Make prop appear above player
+            heldProp.transform.localPosition = heldPropPosition;
+        }
         if (heldProp != null)
         {
             isHoldingProp = true;
