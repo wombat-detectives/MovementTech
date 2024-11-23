@@ -69,7 +69,7 @@ MonoBehaviour:
   climbSpeed: 10
   wallrunSpeed: 15
   groundDrag: 4
-  dashPower: 6
+  dashPower: 8
   dashCooldownTime: 2
   jumpPower: 15
   jumpSpeed: 1
