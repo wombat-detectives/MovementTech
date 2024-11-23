@@ -1391,7 +1391,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4438804796074417086}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.9711875, z: 0, w: 0.23831671}
+  m_LocalRotation: {x: 0, y: 0.97118837, z: 0, w: 0.23831315}
   m_LocalPosition: {x: -151.53581, y: 39.916748, z: 30.680832}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 1
@@ -1399,7 +1399,7 @@ Transform:
   - {fileID: 525284323157171025}
   - {fileID: 6744153636774354852}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 152.426, z: 0}
 --- !u!114 &8712461965678233719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1434,14 +1434,14 @@ MonoBehaviour:
   extraGravity: 98.6
   maxForce: 15000
   walkSpeed: 20.8
-  airSpeed: 15.07
+  airSpeed: 16.2
   maxAirSpeedMod: 0.5
   climbSpeed: 10
   wallrunSpeed: 15
   groundDrag: 4
   dashPower: 8
   dashCooldownTime: 2
-  jumpPower: 16.1
+  jumpPower: 16
   jumpSpeed: 1
   jumpCooldown: 0.25
   jumpInput: 0
