@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class Climbing : MonoBehaviour
 {
-
     [Header("References")]
     public Transform orientation;
     public Rigidbody rb;
     public PlayerMovement pm;
     public LayerMask whatIsWall;
+    public LayerMask infiniteWallLayer; 
 
     [Header("Climbing")]
     public float climbSpeed;
@@ -42,10 +42,12 @@ public class Climbing : MonoBehaviour
     public float exitWallTime;
     private float exitWallTimer;
 
+    private bool isInfiniteWall;
+
     void Update()
     {
         WallCheck();
-        StateMachine(); 
+        StateMachine();
     }
 
     private void FixedUpdate()
@@ -55,35 +57,34 @@ public class Climbing : MonoBehaviour
 
     private void StateMachine()
     {
-        // State 1 - Climbing
-        if(wallFront && pm.move.y > 0 && wallLookAngle < maxWallLookAngle && !exitingWall)
+        
+        if (wallFront && pm.move.y > 0 && wallLookAngle < maxWallLookAngle && !exitingWall)
         {
-            if(!pm.climbing && climbTimer > 0) StartClimbing();
+            if (!pm.climbing && (climbTimer > 0 || isInfiniteWall)) StartClimbing();
 
-            // timer
-            if(climbTimer > 0) climbTimer -= Time.deltaTime;
-            if(climbTimer <= 0) StopClimbing();
+            
+            if (!isInfiniteWall && climbTimer > 0) climbTimer -= Time.deltaTime;
+            if (climbTimer <= 0 && !isInfiniteWall) StopClimbing();
         }
 
-        // State 2 - Exiting Wall
+        
         else if (exitingWall)
         {
             if (pm.climbing) StopClimbing();
 
-            if(exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
+            if (exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
             if (exitWallTimer <= 0)
             {
                 spamJumpsLeft = spamJumps;
                 exitingWall = false;
                 pm.canMove = true;
             }
-
         }
 
-        // State 3 - None
+        
         else
         {
-            if(pm.climbing) StopClimbing();
+            if (pm.climbing) StopClimbing();
             if (!pm.canMove) pm.canMove = true;
         }
 
@@ -92,12 +93,17 @@ public class Climbing : MonoBehaviour
 
     private void WallCheck()
     {
-        wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
+        wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall | infiniteWallLayer);
         wallLookAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
-        bool newWall = frontWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
+        // infinite wall
+        isInfiniteWall = frontWallHit.transform != null &&
+                         ((1 << frontWallHit.transform.gameObject.layer) & infiniteWallLayer) != 0;
 
-        if ((wallFront && newWall) || pm.grounded)
+        bool newWall = frontWallHit.transform != lastWall ||
+                       Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
+ 
+        if ((wallFront && newWall && !isInfiniteWall) || pm.grounded)
         {
             climbTimer = maxClimbTime;
             climbJumpsLeft = climbJumps;
@@ -128,7 +134,8 @@ public class Climbing : MonoBehaviour
         if (exitingWall && spamJumpsLeft > 0)
         {
             spamJumpsLeft--;
-        } else if(exitingWall)
+        }
+        else if (exitingWall)
         {
             return;
         }
