@@ -13,7 +13,7 @@ public class PlayerSFXManager : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
         anim = GetComponentInChildren<Animator>();
-        stepAudio = GetComponent<FootstepAudio>();
+        //stepAudio = GetComponent<FootstepAudio>();
     }
 
     void Update()
@@ -23,7 +23,7 @@ public class PlayerSFXManager : MonoBehaviour
             FootstepAudio.footstepTypes ground;
             Enum.TryParse(groundType(), out ground);
 
-            stepAudio.setFootstepType(ground);
+            //stepAudio.setFootstepType(ground);
             anim.speed = rb.linearVelocity.magnitude/ 9f;
             anim.SetBool("isWalking", true);
         } else
