@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CoinManager : MonoBehaviour
 {
@@ -18,6 +19,15 @@ public class CoinManager : MonoBehaviour
             return;
         }
         instance = this;
+
+        //Get all coins in scene
+        GameObject[] allCoins = GameObject.FindGameObjectsWithTag("Coin");
+
+        //enable or disable based on saved data
+        foreach (GameObject coin in allCoins)
+        {
+            Debug.Log(coin.GetInstanceID());
+        }
     }
 
     public void addCoin(int count)
