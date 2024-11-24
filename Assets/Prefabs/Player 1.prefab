@@ -1412,6 +1412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a6d5c3917dbee4eb91d6a9ae9b7ee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentAnimation: 
 --- !u!114 &5039204771789795830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1775,6 +1776,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 1a30ca35-fc09-4e19-989d-68c828ca2d65
     m_ActionName: Player/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 132c0663-5d10-4721-aec0-2f6aea8134f2
+    m_ActionName: 'UI/Pause[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -2014,6 +2019,7 @@ GameObject:
   - component: {fileID: 525284323157171025}
   - component: {fileID: 4591246508608556735}
   - component: {fileID: 1421995211912460265}
+  - component: {fileID: 1346556785642254872}
   - component: {fileID: 8248350310426855009}
   m_Layer: 0
   m_Name: MC_Model_Rigging 1.1
@@ -2060,6 +2066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a6d5c3917dbee4eb91d6a9ae9b7ee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentAnimation: 
 --- !u!114 &1421995211912460265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2107,6 +2114,33 @@ MonoBehaviour:
     animated: 1
   wind: {x: 0, y: 0, z: 0}
   debugDraw: 0
+--- !u!114 &1346556785642254872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5084241374141420397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9316fddb1b85f940b517fec9e9cb184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: 1
+  grassFootsteps:
+  - {fileID: 8300000, guid: 482bfffa344e7bd4c9a00f4eb815904f, type: 3}
+  - {fileID: 8300000, guid: 4e55dda2b08734f40853431b02e7b98e, type: 3}
+  - {fileID: 8300000, guid: 3273411844fe18a4db3d9b2c5ef3a027, type: 3}
+  brickFootsteps:
+  - {fileID: 8300000, guid: 6ed64815bde8ec943b797ea6151e578e, type: 3}
+  - {fileID: 8300000, guid: dbd6ebf8333aa5547b708f8a1d45d8f7, type: 3}
+  - {fileID: 8300000, guid: 555d31db8388b8c43b2fd032e722b139, type: 3}
+  - {fileID: 8300000, guid: 661280378bc3a2a4b89df61cfa3ae1c9, type: 3}
+  propFootsteps:
+  - {fileID: 8300000, guid: 6ed64815bde8ec943b797ea6151e578e, type: 3}
+  - {fileID: 8300000, guid: dbd6ebf8333aa5547b708f8a1d45d8f7, type: 3}
+  - {fileID: 8300000, guid: 555d31db8388b8c43b2fd032e722b139, type: 3}
+  - {fileID: 8300000, guid: 661280378bc3a2a4b89df61cfa3ae1c9, type: 3}
 --- !u!95 &8248350310426855009
 Animator:
   serializedVersion: 7

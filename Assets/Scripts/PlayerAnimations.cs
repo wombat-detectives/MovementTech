@@ -3,7 +3,7 @@ using Debug = UnityEngine.Debug;
 public class PlayerAnimations : MonoBehaviour
 {
     private Animator animator;
-    private string currentAnimation = "";
+    [HideInInspector] public string currentAnimation = "";
 
     void Start()
     {

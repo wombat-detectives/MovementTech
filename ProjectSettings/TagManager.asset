@@ -11,6 +11,7 @@ TagManager:
   - Brick
   - Wood
   - MusicPlayer
+  - GameManager
   layers:
   - Default
   - TransparentFX

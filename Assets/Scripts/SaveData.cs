@@ -1,21 +1,29 @@
-using UnityEngine;
-
 [System.Serializable]
 public class SaveData
 {
     public bool tutorialCompleted;
-    public bool lvl1Key1;
-    public bool lvl1key2;
-    public bool lvl2key1;
-    public bool lvl2key2;
+    public bool key0Collected;
+    public bool key1Collected;
+    public bool key2Collected;
+    public bool key3Collected;
 
-    public SaveData(GameMaster game)
+    public float key0Time;
+    public float key1Time;
+    public float key2Time;
+    public float key3Time;
+
+    public SaveData()
     {
-        tutorialCompleted = game.tutorialComplete;
-        lvl1Key1 = game.lvl1Key1;
-        lvl1key2 = game.lvl1key2;
-        lvl2key1 = game.lvl2key1;
-        lvl2key2 = game.lvl2key2;
+        tutorialCompleted = GameMaster.tutorialComplete;
+        key0Collected = GameMaster.keyCollectedStatus[0];
+        key1Collected = GameMaster.keyCollectedStatus[1];
+        key2Collected = GameMaster.keyCollectedStatus[2];
+        key3Collected = GameMaster.keyCollectedStatus[3];
+
+        key0Time = GameMaster.times[0];
+        key1Time = GameMaster.times[1];
+        key2Time = GameMaster.times[2];
+        key3Time = GameMaster.times[3];
     }
 
 }

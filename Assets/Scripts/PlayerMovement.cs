@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
@@ -139,12 +137,6 @@ public class PlayerMovement : MonoBehaviour
             playerAnimation.PlayAirAnimation();
         }
 
-        // Cursor
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleCursor();
-        }
-
         // UI
         UpdateUI();
     }
@@ -168,17 +160,6 @@ public class PlayerMovement : MonoBehaviour
         slideController = GetComponent<Sliding>();
 
         readyToJump = true;
-    }
-
-    private void ToggleCursor()
-    {
-        if(Cursor.lockState == CursorLockMode.None)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        } else
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
     }
 
     private void UpdateUI()

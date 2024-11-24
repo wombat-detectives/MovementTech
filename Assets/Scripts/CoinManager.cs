@@ -28,6 +28,21 @@ public class CoinManager : MonoBehaviour
         {
             Debug.Log(coin.GetInstanceID());
         }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene level, LoadSceneMode mode)
+    {
+        // get the coin hud display each time the scene loads
+        TextMeshProUGUI[] hudObjects = FindObjectsByType<TextMeshProUGUI>(FindObjectsSortMode.None);
+        foreach (TextMeshProUGUI hudObject in hudObjects)
+        {
+            if (hudObject.name == "CoinCounter")
+                coinText = hudObject;
+        }
+
+        UpdateUI();
     }
 
     public void addCoin(int count)
