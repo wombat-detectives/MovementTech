@@ -135,12 +135,14 @@ public class PropGrabbing : MonoBehaviour
             heldPropRB = heldProp.GetComponent<Rigidbody>();
         }
 
-        //Assign heldProp as child of player
-        heldProp.transform.parent = transform;
+        if (heldProp != null)
+        {
+            //Assign heldProp as child of player
+            heldProp.transform.parent = transform;
 
-        //Make prop appear above player
-        heldProp.transform.localPosition = heldPropPosition;
-
+            //Make prop appear above player
+            heldProp.transform.localPosition = heldPropPosition;
+        }
         if (heldProp != null)
         {
             isHoldingProp = true;
@@ -163,7 +165,7 @@ public class PropGrabbing : MonoBehaviour
         heldProp.transform.parent = null;
         heldPropRB.linearVelocity = playerRB.linearVelocity;
         heldPropRB.angularVelocity = playerRB.angularVelocity;
-        heldPropRB.AddForce(transform.forward * propThrowForce, ForceMode.Impulse);
+        heldPropRB.AddForce(transform.forward * propThrowForce * heldPropRB.mass, ForceMode.Impulse);
 
         heldProp = null;
         heldPropRB = null;

@@ -1,15 +1,16 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using Debug = UnityEngine.Debug;
 public class PlayerMovement : MonoBehaviour
 {
     public Vector2 move;
+    [HideInInspector] public bool canMove = true;
     private Vector3 moveDir;
     private float turnSmoothVel;
     public readonly float expectedFramerate = 60f;
     private Sliding slideController;
+    [SerializeField] private PlayerAnimations playerAnimation;
 
     [Header("Setup Fields")]
     [SerializeField] private Transform PlayerCamera;
@@ -20,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Lateral Movement")]
     private float speed;
-    public float maxForce, walkSpeed, airSpeed, climbSpeed, wallrunSpeed, groundDrag, dashPower, dashCooldownTime;
+    public float maxForce, walkSpeed, airSpeed, maxAirSpeedMod, climbSpeed, wallrunSpeed, groundDrag, dashPower, dashCooldownTime;
     private float dashCooldownTimer;
 
     [Header("Jumping")]
@@ -53,7 +54,8 @@ public class PlayerMovement : MonoBehaviour
         air,
         sliding,
         climbing,
-        wallrunning
+        wallrunning,
+        notMoving
     }
 
     [HideInInspector] public bool sliding;
@@ -67,12 +69,14 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.wallrunning;
             speed = wallrunSpeed;
+            playerAnimation.PlayWallrunAnimation();
         }
         // climbing
         else if (climbing)
         {
             state = MovementState.climbing;
             speed = climbSpeed;
+            playerAnimation.PlayClimbAnimation();
         }
 
         // sliding
@@ -80,14 +84,24 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sliding;
             rb.linearDamping = 0;
+            playerAnimation.PlaySlideAnimation();
+        }
+        else if (grounded && move.magnitude <= 0.1f)
+        {
+            state = MovementState.notMoving;
+            speed = 0f; 
+            rb.linearDamping = groundDrag; 
+            playerAnimation.PlayIdleAnimation(); 
         }
 
         // walking
         else if (grounded)
         {
+            Debug.Log("Running");
             state = MovementState.walking;
             speed = walkSpeed;
             rb.linearDamping = groundDrag;
+            playerAnimation.PlayRunAnimation();
         }
 
         // air
@@ -96,6 +110,7 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.air;
             speed = airSpeed;
             rb.linearDamping = 0;
+            
         }
     }
 
@@ -119,12 +134,7 @@ public class PlayerMovement : MonoBehaviour
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
-        }
-
-        // Cursor
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleCursor();
+            playerAnimation.PlayAirAnimation();
         }
 
         // UI
@@ -134,7 +144,8 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // Movement
-        MovePlayer();
+        if(canMove)
+            MovePlayer();
 
         // Extra Gravity
         if(!grounded && rb.useGravity)
@@ -151,27 +162,21 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
     }
 
-    private void ToggleCursor()
-    {
-        if(Cursor.lockState == CursorLockMode.None)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        } else
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-    }
-
     private void UpdateUI()
     {
         Vector3 horizVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
-        velocityDisplay.text = "Velocity: " + string.Format("{0:000.00}", horizVel.magnitude);
-        dashDisplay.text = "Dash: " + string.Format("{0:0.00}", dashCooldownTimer);
+        if(velocityDisplay != null && dashDisplay != null)
+        {
+            velocityDisplay.text = "Velocity: " + string.Format("{0:000.00}", horizVel.magnitude);
+            dashDisplay.text = "Dash: " + string.Format("{0:0.00}", dashCooldownTimer);
+        }
+       
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
+     
         move = context.ReadValue<Vector2>();
     }
 
@@ -217,7 +222,9 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 // Calculate the target velocity based on desired direction and current speed
-                float currentSpeed = currentVel.magnitude;
+                Vector3 horizVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                float currentSpeed = horizVel.magnitude;
+                
                 Vector3 targetVelocity = moveDir * Mathf.Max(speed, currentSpeed);  // Maintain current speed or target speed, whichever is higher
 
                 // Calculate the force needed to gradually steer towards the target velocity
@@ -236,6 +243,12 @@ public class PlayerMovement : MonoBehaviour
                 if (grounded)
                 {
                     velChange *= rb.linearDamping;
+                }
+
+                // half force when above target speed
+                if(currentSpeed > airSpeed)
+                {
+                    velChange *= maxAirSpeedMod;
                 }
 
                 // Apply the force for smooth movement and direction control

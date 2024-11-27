@@ -114,7 +114,10 @@ public class WallRunning : MonoBehaviour
                 exitWallTimer -= Time.deltaTime;
 
             if (exitWallTimer <= 0)
+            {
                 exitingWall = false;
+                pm.canMove = true;
+            }  
         }
 
         // State 3 - None
@@ -122,6 +125,7 @@ public class WallRunning : MonoBehaviour
         {
             if (pm.wallrunning)
                 StopWallRun();
+            if (!pm.canMove) pm.canMove = true;
         }
 
         
@@ -172,6 +176,7 @@ public class WallRunning : MonoBehaviour
         // enter exiting wall state
         exitingWall = true;
         exitWallTimer = exitWallTime;
+        pm.canMove = false;
 
         Vector3 wallNormal = wallRight ? rightWallHit.normal: leftWallHit.normal;
 

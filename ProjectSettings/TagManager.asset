@@ -10,6 +10,8 @@ TagManager:
   - Grass
   - Brick
   - Wood
+  - MusicPlayer
+  - GameManager
   layers:
   - Default
   - TransparentFX
@@ -21,7 +23,7 @@ TagManager:
   - WhatIsWall
   - ClippableWall
   - Pickupable
-  - 
+  - WhatIsWallInfinite
   - 
   - 
   - 

@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HubWorld.unity
     guid: c34f86bf228792b4299b272005c040cc
+  - enabled: 1
+    path: Assets/Scenes/GrassLevel.unity
+    guid: 3289a0d12b7abaf4f90a77c2cfc0ac79
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

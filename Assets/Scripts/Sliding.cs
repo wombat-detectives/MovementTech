@@ -17,6 +17,8 @@ public class Sliding : MonoBehaviour
     public float slideDownForce;
     private float slideTimer;
 
+    public float maxBLJSpeed;
+
     public float slideFriction = 0.1f;
     private float startFriction;
 
@@ -86,13 +88,9 @@ public class Sliding : MonoBehaviour
             if(pm.grounded && rb.linearVelocity.magnitude < 5f)
             {
                 rb.AddForce(inputDirection.normalized * slideForce * rb.mass, ForceMode.Force);
-            } else if(pm.move.y < 0)
+            } else if(pm.move.y < 0 && rb.linearVelocity.magnitude < maxBLJSpeed)
             {
-                rb.AddForce(inputDirection.normalized * slideForce * 0.75f * rb.mass, ForceMode.Force);
-            }
-            else
-            {
-                rb.AddForce(inputDirection.normalized * slideForce * 0.25f * rb.mass, ForceMode.Force);
+                rb.AddForce(inputDirection.normalized * slideForce * 0.65f * rb.mass, ForceMode.Force);
             }
             
         }
