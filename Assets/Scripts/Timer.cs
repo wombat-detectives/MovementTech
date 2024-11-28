@@ -43,7 +43,7 @@ public class Timer : MonoBehaviour
         return minutes + ":" + seconds;
     }
 
-    public string GetTimeString(float time)
+    public static string GetTimeString(float time)
     {
         float minutes = (float)Math.Floor(time / 60);
         string seconds = string.Format("{0:00.00}", (time % 60));
