@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class GameMaster
@@ -8,6 +10,7 @@ public static class GameMaster
     //Save Data
     public static bool tutorialComplete;
     public static bool[] keyCollectedStatus = new bool[4];
+    public static int coins = 0;
 
     public static void NewGame()
     {
@@ -17,6 +20,8 @@ public static class GameMaster
             times[i] = Mathf.Infinity;
             keyCollectedStatus[i] = false;
         }
+
+        coins = 0;
     }
 
     public static void CollectKey(int key)
@@ -40,6 +45,8 @@ public static class GameMaster
         keyCollectedStatus[1] = data.key1Collected;
         keyCollectedStatus[2] = data.key2Collected;
         keyCollectedStatus[3] = data.key3Collected;
+
+        coins = data.coins;
 
         times[0] = data.key0Time;
         times[1] = data.key1Time;

@@ -7,6 +7,7 @@ public class CoinCollectible : MonoBehaviour
 
     private void Start()
     {
+        gameObject.name = GetInstanceID().ToString();
         coinManager = CoinManager.instance;
         setCollected(isCollected);
     }
@@ -17,7 +18,7 @@ public class CoinCollectible : MonoBehaviour
         {
             if (other != null)
             {
-                coinManager.addCoin(1);
+                coinManager.AddCoin(1);
                 setCollected(true);
             }
         }
