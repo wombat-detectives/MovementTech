@@ -13,6 +13,7 @@ public class DontDestroyOnLoad : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
         DontDestroyOnLoad(gameObject);
     }
 

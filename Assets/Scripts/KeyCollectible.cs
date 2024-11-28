@@ -15,7 +15,8 @@ public class KeyCollectible : MonoBehaviour
         if (other.tag == "Player")
         {
             GameMaster.CollectKey(keyID);
-            if(timer != null)
+            CoinManager.instance.SaveCoins();
+            if (timer != null)
                 timer.EndTimer(keyID);
             GameMaster.SaveGame();
         }

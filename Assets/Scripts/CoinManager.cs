@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,15 +21,6 @@ public class CoinManager : MonoBehaviour
         }
         instance = this;
 
-        //Get all coins in scene
-        GameObject[] allCoins = GameObject.FindGameObjectsWithTag("Coin");
-
-        //enable or disable based on saved data
-        foreach (GameObject coin in allCoins)
-        {
-            Debug.Log(coin.GetInstanceID());
-        }
-
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -42,10 +34,22 @@ public class CoinManager : MonoBehaviour
                 coinText = hudObject;
         }
 
+        LoadCoins();
+
         UpdateUI();
     }
 
-    public void addCoin(int count)
+    public void SaveCoins()
+    {
+        GameMaster.coins = coinCount;
+    }
+
+    public void LoadCoins()
+    {
+        coinCount = GameMaster.coins;
+    }
+
+    public void AddCoin(int count)
     {
         coinCount += count;
         UpdateUI();
