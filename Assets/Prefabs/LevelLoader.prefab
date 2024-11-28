@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 7211922253827684798}
   - component: {fileID: 644394819537960208}
   - component: {fileID: 5935487521721301576}
+  - component: {fileID: 3005979312930441559}
   m_Layer: 0
   m_Name: CircleWipe
   m_TagString: Untagged
@@ -247,6 +248,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3005979312930441559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4754374481470299074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9ab7200daa77574d95775c45d0762ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inSound: {fileID: 8300000, guid: 0a87bbcd8dff9634e90442e01707351c, type: 3}
+  outSound: {fileID: 8300000, guid: 496b376b3a2799c4e85b3177dc955e4a, type: 3}
 --- !u!1 &8368719261938789230
 GameObject:
   m_ObjectHideFlags: 0

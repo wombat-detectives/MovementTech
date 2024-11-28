@@ -9586,7 +9586,7 @@ GameObject:
   - component: {fileID: 661841069}
   - component: {fileID: 661841068}
   - component: {fileID: 661841067}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Arch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
