@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -15,9 +15,19 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
         {
-            Toggle();
+            if (Input.GetKeyDown(KeyCode.Escape) || gamepad.startButton.wasPressedThisFrame)
+            {
+                Toggle();
+            }
+        } else
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Toggle();
+            }
         }
     }
 

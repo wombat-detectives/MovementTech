@@ -1,13 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 public class ShowText : MonoBehaviour
 {
-    // Scene stuff for reveal
-    [Tooltip("Only needed if target self is false")] public string targetScene;
-    public bool targetSelf = false;
     // Dialogue vars
     public TMP_Text NPCDialogue;
 
@@ -18,12 +12,26 @@ public class ShowText : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        NPCDialogue.enabled = true;
+        if (other.CompareTag("Player") && !NPCDialogue.enabled)
+        {
+            NPCDialogue.enabled = true;
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player") && !NPCDialogue.enabled)
+        {
+            NPCDialogue.enabled = true;
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        NPCDialogue.enabled = false;
+        if (other.CompareTag("Player") && NPCDialogue.enabled)
+        {
+            NPCDialogue.enabled = false;
+        }
     }
 
 }

@@ -41,8 +41,8 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit slopeHit;
 
     [Header("Stat Tracking")]
-    public TextMeshProUGUI velocityDisplay;
-    public TextMeshProUGUI dashDisplay;
+    public Speedometer velocityDisplay;
+    public DashDisplay dashHUD;
 
     [Header("References")]
     public Climbing climbingScript;
@@ -122,10 +122,10 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics.Raycast(rb.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
         //  Dash timer
-        if (dashCooldownTimer > 0)
+        if (dashCooldownTimer < dashCooldownTime)
         {
-            dashCooldownTimer -= Time.deltaTime;
-            dashCooldownTimer = Mathf.Clamp(dashCooldownTimer, 0f, Mathf.Infinity);
+            dashCooldownTimer += Time.deltaTime;
+            dashCooldownTimer = Mathf.Clamp(dashCooldownTimer, 0f, dashCooldownTime);
         }
 
         // when to jump
@@ -159,6 +159,9 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         slideController = GetComponent<Sliding>();
 
+        if (dashHUD != null)
+            dashHUD.SetMaxCooldown(dashCooldownTime);
+
         readyToJump = true;
     }
 
@@ -166,12 +169,11 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 horizVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
-        if(velocityDisplay != null && dashDisplay != null)
-        {
-            velocityDisplay.text = "Velocity: " + string.Format("{0:000.00}", horizVel.magnitude);
-            dashDisplay.text = "Dash: " + string.Format("{0:0.00}", dashCooldownTimer);
-        }
-       
+        if(velocityDisplay != null)
+            velocityDisplay.SetSpeed(horizVel.magnitude);
+
+        if(dashHUD != null)
+            dashHUD.SetCooldown(dashCooldownTimer);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -292,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash()
     {
-        if (dashCooldownTimer <= 0)
+        if (dashCooldownTimer >= dashCooldownTime)
         {
             // Reduce dash power when over target speed
             float dashPowerProportional = dashPower;
@@ -306,7 +308,7 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(dashForce, ForceMode.Impulse);
 
             // Reset timer
-            dashCooldownTimer = dashCooldownTime;
+            dashCooldownTimer = 0f;
         }
     }
 

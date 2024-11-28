@@ -1453,7 +1453,7 @@ MonoBehaviour:
   grounded: 1
   maxSlopeAngle: 40
   velocityDisplay: {fileID: 0}
-  dashDisplay: {fileID: 0}
+  dashHUD: {fileID: 0}
   climbingScript: {fileID: 2135357380254066234}
   state: 5
   sliding: 0
@@ -1598,7 +1598,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &2900798299533937436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1779,7 +1779,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 132c0663-5d10-4721-aec0-2f6aea8134f2
-    m_ActionName: 'UI/Pause[/Keyboard/escape]'
+    m_ActionName: UI/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
