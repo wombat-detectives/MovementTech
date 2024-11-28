@@ -1,9 +1,12 @@
 using UnityEngine;
+using System.Collections; // Required for IEnumerator and Coroutines
 using Debug = UnityEngine.Debug;
+
 public class PlayerAnimations : MonoBehaviour
 {
     private Animator animator;
     [HideInInspector] public string currentAnimation = "";
+    private bool isKeyPickupAnimationPlaying = false; // Lock for key pickup animation
 
     void Start()
     {
@@ -12,41 +15,66 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlaySlideAnimation()
     {
-        if (currentAnimation != "Slide")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Slide")
         {
             animator.Play("Slide", 1);
             currentAnimation = "Slide";
         }
     }
 
+    public void PlayKeyPickupAnimation()
+    {
+        if (!isKeyPickupAnimationPlaying)
+        {
+            isKeyPickupAnimationPlaying = true; // Lock animation state
+            animator.Play("KeyPickupAnim", 1);
+
+            // Start a coroutine to unlock after the animation ends
+            StartCoroutine(UnlockKeyPickupAnimation());
+        }
+    }
+
+    private IEnumerator UnlockKeyPickupAnimation()
+    {
+        // Wait until the KeyPickupAnim animation finishes
+        yield return new WaitUntil(() =>
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1); // Layer 1
+            return stateInfo.IsName("KeyPickupAnim") && stateInfo.normalizedTime >= 1.0f;
+        });
+
+        isKeyPickupAnimationPlaying = false; // Unlock after animation
+    }
+
     public void PlayIdleAnimation()
     {
-        if (currentAnimation != "Idle" && currentAnimation != "Jump")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Idle" && currentAnimation != "Jump")
         {
-            animator.CrossFade("Idle", 0.2f, 1);
+            if (currentAnimation == "FallShort" || currentAnimation == "FallLong")
+            {
+                animator.CrossFade("Idle", 0.1f, 1); // Shorter crossfade for falling animations
+            }
+            else
+            {
+                animator.CrossFade("Idle", 0.2f, 1); // Default crossfade for other transitions
+            }
+
             currentAnimation = "Idle";
         }
     }
-    public void PlayIdleCrouchAnimation()
-    {
 
-    }
-
-    public void PlayCrouchWalkAnimation()
-    {
-
-    }
     public void PlayWallrunAnimation()
     {
-        if (currentAnimation != "Climb")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Wallrun")
         {
-            animator.Play("Climb", 1);
-            currentAnimation = "Climb";
+            animator.Play("Wallrun", 1);
+            currentAnimation = "Wallrun";
         }
     }
+
     public void PlayClimbAnimation()
     {
-        if (currentAnimation != "Climb")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Climb")
         {
             animator.Play("Climb", 1);
             currentAnimation = "Climb";
@@ -55,42 +83,70 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayAirAnimation()
     {
-        PlayJumpAnimation();
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Air")
+        {
+            animator.CrossFade("Air", 0.2f, 1);
+            currentAnimation = "Air";
+        }
     }
+
     public void PlayRunAnimation()
     {
-        Debug.Log("Run animation called");
-        if (currentAnimation == "Run")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Run")
         {
-            Debug.Log("Canceling run");
-        }
-        if (currentAnimation != "Run" && currentAnimation != "Jump" && currentAnimation != "Lunge")
-        {
-            Debug.Log("Play Run animation");
+            Debug.Log("Run animation called");
             animator.CrossFade("Run", 0.2f, 1);
             currentAnimation = "Run";
         }
     }
 
+    public void PlayFallShortAnimation()
+    {
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "FallShort")
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1); // Layer 1
+            if (stateInfo.normalizedTime >= 1.0f && !stateInfo.IsName("FallShort"))
+            {
+                animator.CrossFade("FallShort", 0.2f, 1); // Play FallShort after current animation finishes
+                currentAnimation = "FallShort";
+            }
+        }
+    }
+
+    public void PlayFallLongAnimation()
+    {
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "FallLong")
+        {
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1); // Layer 1
+            if (stateInfo.normalizedTime >= 1.0f && !stateInfo.IsName("FallLong"))
+            {
+                animator.CrossFade("FallLong", 0.2f, 1); // Play FallLong after current animation finishes
+                currentAnimation = "FallLong";
+            }
+        }
+    }
+
     public void PlayDashAnimation()
     {
-        if (currentAnimation != "Dash")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Dash")
         {
             animator.CrossFade("Dash", 0.2f, 2);
             currentAnimation = "Dash";
         }
     }
+
     public void PlayLungeAnimation()
     {
-        if (currentAnimation != "Lunge")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Lunge")
         {
             animator.CrossFade("Lunge", 0.2f, 1);
             currentAnimation = "Lunge";
         }
     }
+
     public void PlayJumpAnimation()
     {
-        if (currentAnimation != "Jump")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "Jump")
         {
             animator.Play("Jump", 1);
             currentAnimation = "Jump";
@@ -99,16 +155,24 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayLandJumpAnimation()
     {
-        if (currentAnimation != "LandJump")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "LandJump")
         {
-            animator.CrossFade("LandJump", 0.2f, 2);
+            if (currentAnimation == "FallShort" || currentAnimation == "FallLong")
+            {
+                animator.CrossFade("LandJump", 0.05f, 2); 
+            }
+            else
+            {
+                animator.CrossFade("LandJump", 0.2f, 2); 
+            }
+
             currentAnimation = "LandJump";
         }
     }
 
     public void PlayWallKickAnimation()
     {
-        if (currentAnimation != "WallKick")
+        if (!isKeyPickupAnimationPlaying && currentAnimation != "WallKick")
         {
             animator.CrossFade("WallKick", 0.2f, 1);
             currentAnimation = "WallKick";

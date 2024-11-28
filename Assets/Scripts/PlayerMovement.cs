@@ -5,7 +5,7 @@ using Debug = UnityEngine.Debug;
 public class PlayerMovement : MonoBehaviour
 {
     public Vector2 move;
-    [HideInInspector] public bool canMove = true;
+    public bool canMove = true;
     private Vector3 moveDir;
     private float turnSmoothVel;
     public readonly float expectedFramerate = 60f;
@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     public bool grounded;
     private bool wasInAir = false;
+    private float fallTime = 0f;
 
     [Header("Slope Handling")]
     public float maxSlopeAngle = 50f;
@@ -123,21 +124,39 @@ public class PlayerMovement : MonoBehaviour
         bool previouslyGrounded = grounded;
         grounded = Physics.Raycast(rb.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
+        // Track if the player is in the air and not climbing
+        if (!grounded && !climbing)
+        {
+            wasInAir = true;
+            fallTime += Time.deltaTime; // Increment fall time while the player is in the air and not climbing
+
+            // Play the appropriate falling animation based on fall duration
+            if (fallTime > 2f)
+            {
+                playerAnimation.PlayFallLongAnimation();
+            }
+            else if (fallTime > 0.5f)
+            {
+                playerAnimation.PlayFallShortAnimation();
+            }
+        }
+
+        // Reset fall timer if climbing
+        if (climbing)
+        {
+            fallTime = 0f;
+        }
+
         // Check if player landed
         if (!previouslyGrounded && grounded && wasInAir)
         {
             playerAnimation.PlayLandJumpAnimation();
             wasInAir = false; // Reset air status
-        }
-
-        // Track if the player is in the air
-        if (!grounded)
-        {
-            wasInAir = true;
+            fallTime = 0f;    // Reset fall time
         }
 
         // Dash timer
-        if (dashCooldownTimer > 0)
+        if (dashCooldownTimer < dashCooldownTime)
         {
             dashCooldownTimer += Time.deltaTime;
             dashCooldownTimer = Mathf.Clamp(dashCooldownTimer, 0f, dashCooldownTime);
@@ -155,6 +174,9 @@ public class PlayerMovement : MonoBehaviour
         // UI
         UpdateUI();
     }
+
+
+
 
 
     void FixedUpdate()
