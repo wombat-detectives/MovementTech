@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private float speed;
     public float maxForce, walkSpeed, airSpeed, maxAirSpeedMod, climbSpeed, wallrunSpeed, groundDrag, dashPower, dashCooldownTime;
     private float dashCooldownTimer;
+    private PlayerSFXManager playerSounds;
 
     [Header("Jumping")]
     [SerializeField] private float jumpPower = 500f;
@@ -97,7 +98,6 @@ public class PlayerMovement : MonoBehaviour
         // walking
         else if (grounded)
         {
-            Debug.Log("Running");
             state = MovementState.walking;
             speed = walkSpeed;
             rb.linearDamping = groundDrag;
@@ -114,9 +114,23 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void HandleLoopingSFX()
+    {
+        // Sliding sfx
+        if (!sliding || (sliding && !grounded))
+            playerSounds.StopSlideSfx();
+        else if (sliding && grounded)
+            playerSounds.PlaySlideSfx(rb.linearVelocity.magnitude);
+
+        // Wind SFX
+        playerSounds.TryWindSfx(rb.linearVelocity.magnitude);
+    }
+
     private void Update()
     {
         StateHandler();
+
+        HandleLoopingSFX();
 
         // Ground check
         grounded = Physics.Raycast(rb.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
@@ -156,6 +170,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        playerSounds = GetComponent<PlayerSFXManager>();
         Cursor.lockState = CursorLockMode.Locked;
         slideController = GetComponent<Sliding>();
 
@@ -285,6 +300,9 @@ public class PlayerMovement : MonoBehaviour
 
         // Apply force
         rb.AddForce(jumpForce, ForceMode.Impulse);
+
+        // Play sfx
+        playerSounds.PlayJumpSfx();
     }
 
     private void ResetJump()
