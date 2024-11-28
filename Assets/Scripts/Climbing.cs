@@ -84,7 +84,7 @@ public class Climbing : MonoBehaviour
         
         else
         {
-            if (pm.climbing) StopClimbing();
+            if(pm.climbing) StopClimbing();
             if (!pm.canMove) pm.canMove = true;
         }
 

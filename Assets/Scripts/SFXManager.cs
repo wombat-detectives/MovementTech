@@ -12,6 +12,8 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private bool playMusic;
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioClip musicClip;
+    private Camera mCam;
+    private Transform musicPlayer;
 
     private void Awake()
     {
@@ -23,21 +25,54 @@ public class SFXManager : MonoBehaviour
     private void Start()
     {
         if (playMusic)
+        {
+            mCam = Camera.main;
             PlayMusic();
+            if (musicPlayer != null)
+                musicPlayer.gameObject.SetActive(true);
+        }
+        else
+        {
+            if (musicPlayer != null)
+                musicPlayer.gameObject.SetActive(false);
+        }
+            
+    }
+
+    private void Update()
+    {
+        if (playMusic && musicPlayer != null)
+        {
+            // parent to camera
+            musicPlayer.transform.position = mCam.transform.position;
+        }
     }
 
     private void PlayMusic()
     {
-        //spawn in GameObject
-        AudioSource audioSrc = Instantiate(musicSource, Vector3.zero, Quaternion.identity);
+        //Find existing music player
+        GameObject[] players = GameObject.FindGameObjectsWithTag("MusicPlayer");
 
-        // parent to camera
-        audioSrc.transform.parent = FindFirstObjectByType<Camera>().transform;
-        audioSrc.transform.localPosition = Vector3.zero;
+        AudioSource audioSrc = null;
+        if (players.Length > 0)
+        {
+            audioSrc = players[0].GetComponent<AudioSource>();
+        }
+        else
+        {
+            //spawn in GameObject
+            audioSrc = Instantiate(musicSource, Vector3.zero, Quaternion.identity);
+        }
+
+        musicPlayer = audioSrc.transform;
 
         //assign properties and play
-        audioSrc.clip = musicClip;
-        audioSrc.Play();
+        if(audioSrc.resource != musicClip)
+        {
+            audioSrc.Stop();
+            audioSrc.clip = musicClip;
+            audioSrc.Play();
+        }
 
         //loop
         audioSrc.loop = true;

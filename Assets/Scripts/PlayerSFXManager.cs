@@ -5,31 +5,25 @@ public class PlayerSFXManager : MonoBehaviour
 {
     private PlayerMovement pm;
     private Rigidbody rb;
-    private Animator anim;
+    private PlayerAnimations animations;
     private FootstepAudio stepAudio;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
-        anim = GetComponentInChildren<Animator>();
-        //stepAudio = GetComponent<FootstepAudio>();
+        animations = GetComponentInChildren<PlayerAnimations>();
+        stepAudio = GetComponentInChildren<FootstepAudio>();
     }
 
     void Update()
     {
-        if (pm.state == PlayerMovement.MovementState.walking && rb.linearVelocity.magnitude > 1)
+        if (pm.grounded)
         {
             FootstepAudio.footstepTypes ground;
             Enum.TryParse(groundType(), out ground);
 
-            //stepAudio.setFootstepType(ground);
-            anim.speed = rb.linearVelocity.magnitude/ 9f;
-            anim.SetBool("isWalking", true);
-        } else
-        {
-            anim.speed = 1;
-            anim.SetBool("isWalking", false);
+            stepAudio.setFootstepType(ground);
         }
     }
 

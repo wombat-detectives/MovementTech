@@ -7,13 +7,18 @@ public class RepulsorTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //For player
         Rigidbody otherRB = other.gameObject.GetComponentInParent<Rigidbody>();
-        if(otherRB != null)
+
+        //For regular props
+        if (otherRB == null )
+            otherRB = other.gameObject.GetComponent<Rigidbody>();
+
+        if (otherRB != null)
         {
             Vector3 center = transform.position + centerOffset;
             Vector3 dir = (other.transform.position - center).normalized;
             otherRB.AddForce(dir * force * otherRB.mass, ForceMode.Impulse);
-            Debug.Log("Wrecked!! " + dir);
         }
     }
 }
