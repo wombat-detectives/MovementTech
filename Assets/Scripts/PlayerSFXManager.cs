@@ -5,14 +5,12 @@ public class PlayerSFXManager : MonoBehaviour
 {
     private PlayerMovement pm;
     private Rigidbody rb;
-    private PlayerAnimations animations;
-    [SerializeField] private FootstepAudio stepAudio;
+    private FootstepAudio stepAudio;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
-        animations = GetComponentInChildren<PlayerAnimations>();
         stepAudio = GetComponentInChildren<FootstepAudio>();
     }
 
