@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit slopeHit;
 
     [Header("Stat Tracking")]
-    public TextMeshProUGUI velocityDisplay;
+    public Speedometer velocityDisplay;
     public DashDisplay dashHUD;
 
     [Header("References")]
@@ -170,9 +170,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 horizVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
         if(velocityDisplay != null)
-        {
-            velocityDisplay.text = "Velocity: " + string.Format("{0:000.00}", horizVel.magnitude);
-        }
+            velocityDisplay.SetSpeed(horizVel.magnitude);
 
         if(dashHUD != null)
             dashHUD.SetCooldown(dashCooldownTimer);

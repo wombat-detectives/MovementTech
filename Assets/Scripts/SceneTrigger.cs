@@ -15,6 +15,8 @@ public class SceneTrigger : MonoBehaviour
             if (tutorialEnd)
             {
                 GameMaster.tutorialComplete = true;
+                CoinManager.instance.SaveCoins();
+                GameMaster.SaveGame();
             }
 
             if (targetSelf)
