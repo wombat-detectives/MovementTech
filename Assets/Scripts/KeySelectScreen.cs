@@ -1,86 +1,55 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
 
 
 public class KeySelectScreen : MonoBehaviour
 {
-    public GameObject defaultSelectedButton; // Assign the default button in the Inspector
-    private EventSystem eventSystem;
+    public float fadeDuration = 1f;
 
-    [SerializeField] private GameObject playerPrefab; // Player prefab to spawn
-    [SerializeField] private Transform spawnPoint; // Transform for the player to spawn here
+    // Reference the image to fade
+    [SerializeField] private Image imageToFade;
 
-    private void Awake()
+    // The name of the scene to load
+    [SerializeField] private string sceneName;
+
+    // Method to transition and load a new scene
+    public void TransitionAndLoadScene()
     {
-        // Ensure EventSystem exists
-        eventSystem = EventSystem.current;
-        if (eventSystem == null)
-        {
-            Debug.LogError("No EventSystem found in the scene. Please add one.");
-        }
-
-        // Automatically select the default button
-        if (defaultSelectedButton != null)
-        {
-            eventSystem.SetSelectedGameObject(defaultSelectedButton);
-        }
+        StartCoroutine(FadeImageAndLoadScene(imageToFade, sceneName));
     }
 
-    private void Update()
+    private IEnumerator FadeImageAndLoadScene(Image image, string sceneName)
     {
-        // Re-select button if nothing is selected (prevents losing focus)
-        if (eventSystem.currentSelectedGameObject == null && defaultSelectedButton != null)
+        if (image == null)
         {
-            eventSystem.SetSelectedGameObject(defaultSelectedButton);
+            Debug.LogError("Image object is null!");
+            yield break;
         }
 
-        // Check for interaction
-        if (Input.GetButtonDown("Submit")) // Replace with your input system method for "Submit"
+        // Ensure the image is visible and fully transparent initially
+        image.gameObject.SetActive(true);
+        Color color = image.color;
+        color.a = 0f;
+        image.color = color;
+
+        // Gradually increase the alpha to 1 over the fade duration
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
         {
-            var currentButton = eventSystem.currentSelectedGameObject?.GetComponent<Button>();
-            currentButton?.onClick.Invoke(); // Trigger the button's action
+            elapsedTime += Time.deltaTime;
+            color.a = Mathf.Clamp01(elapsedTime / fadeDuration);
+            image.color = color;
+            yield return null;
         }
 
-        // Cancel button for exiting menu
-        if (Input.GetButtonDown("Cancel")) // Replace with your input system method for "Cancel"
-        {
-            // Handle pause menu exit logic here
-            Debug.Log("Cancel pressed - Handle menu exit");
-        }
-    }
+        // Ensure alpha is exactly 1
+        color.a = 1f;
+        image.color = color;
 
-    public void KeySelect(int keyValue)
-    {
-        // Example: Log and perform actions based on keyValue
-        Debug.Log("Key selected: " + keyValue);
-
-        // Set canvas alpha to 0
-        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup != null)
-        {
-            canvasGroup.alpha = 0;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-        }
-
-        // Store the selected key value globally (can use a static variable or a game manager)
-        GlobalGameManager.Instance.SelectedKey = keyValue;
-
-        // Spawn player
-        SpawnPlayer();
-    }
-
-    public void SpawnPlayer()
-    {
-        if (playerPrefab != null && spawnPoint != null)
-        {
-            Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
-            Debug.Log("Player spawned at: " + spawnPoint.position);
-        }
-        else
-        {
-            Debug.LogError("Player prefab or spawn point is not assigned.");
-        }
+        // Load the specified scene
+        SceneManager.LoadScene(sceneName);
     }
 }
