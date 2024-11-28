@@ -6,7 +6,7 @@ public class PlayerSFXManager : MonoBehaviour
     private PlayerMovement pm;
     private Rigidbody rb;
     private PlayerAnimations animations;
-    private FootstepAudio stepAudio;
+    [SerializeField] private FootstepAudio stepAudio;
 
     void Start()
     {

@@ -92,7 +92,7 @@ public class PlayerAnimations : MonoBehaviour
     {
         if (currentAnimation != "Jump")
         {
-            animator.CrossFade("Jump", 0.2f, 1);
+            animator.Play("Jump", 1);
             currentAnimation = "Jump";
         }
     }

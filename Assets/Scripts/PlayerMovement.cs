@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public float playerHeight;
     public LayerMask whatIsGround;
     public bool grounded;
+    private bool wasInAir = false;
 
     [Header("Slope Handling")]
     public float maxSlopeAngle = 50f;
@@ -119,16 +120,30 @@ public class PlayerMovement : MonoBehaviour
         StateHandler();
 
         // Ground check
+        bool previouslyGrounded = grounded;
         grounded = Physics.Raycast(rb.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
-        //  Dash timer
+        // Check if player landed
+        if (!previouslyGrounded && grounded && wasInAir)
+        {
+            playerAnimation.PlayLandJumpAnimation();
+            wasInAir = false; // Reset air status
+        }
+
+        // Track if the player is in the air
+        if (!grounded)
+        {
+            wasInAir = true;
+        }
+
+        // Dash timer
         if (dashCooldownTimer > 0)
         {
             dashCooldownTimer -= Time.deltaTime;
             dashCooldownTimer = Mathf.Clamp(dashCooldownTimer, 0f, Mathf.Infinity);
         }
 
-        // when to jump
+        // When to jump
         if (jumpInput > 0 && readyToJump && grounded)
         {
             readyToJump = false;
@@ -140,6 +155,7 @@ public class PlayerMovement : MonoBehaviour
         // UI
         UpdateUI();
     }
+
 
     void FixedUpdate()
     {

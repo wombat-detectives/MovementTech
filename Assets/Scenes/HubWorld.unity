@@ -5894,6 +5894,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4438804796074417086, guid: 24fe12d16c936c44eba923fd46e2823b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5039204771789795830, guid: 24fe12d16c936c44eba923fd46e2823b, type: 3}
       propertyPath: dashDisplay
       value: 
