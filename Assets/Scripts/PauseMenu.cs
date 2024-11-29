@@ -61,7 +61,9 @@ public class PauseMenu : MonoBehaviour
 
     public void Menu()
     {
-        Debug.Log("go to menu");
+        Toggle();
+        ToggleCursor();
+        LevelLoader.instance.LoadLevelByString("MainMenu");
     }
 
     private void ToggleCursor()
