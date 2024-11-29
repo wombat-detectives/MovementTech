@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class FootstepAudio : MonoBehaviour
@@ -22,8 +23,21 @@ public class FootstepAudio : MonoBehaviour
 
     public void playFootstep()
     {
+        if (SFXManager.instance == null)
+        {
+            Debug.LogError("SFXManager instance is null! Make sure SFXManager is in the scene.");
+            return;
+        }
+
+        if (activeFootsteps == null || activeFootsteps.Length == 0)
+        {
+            Debug.LogWarning("No active footsteps assigned or the array is empty!");
+            return;
+        }
+
         SFXManager.instance.PlayRandomSFXClip(activeFootsteps, transform, volume);
     }
+
 
     public void setFootstepType(footstepTypes footstepType)
     {
