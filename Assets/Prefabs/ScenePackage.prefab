@@ -494,10 +494,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SFXManager
       objectReference: {fileID: 0}
-    - target: {fileID: 1968058701689444381, guid: 75b4256a4ce43094f98582261fea7405, type: 3}
-      propertyPath: musicClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 58f27dc284584d04c8a73d6f1627d079, type: 3}
     - target: {fileID: 2167083141381946858, guid: 75b4256a4ce43094f98582261fea7405, type: 3}
       propertyPath: m_LocalPosition.x
       value: -311.11044
@@ -799,7 +795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2198529442404733915, guid: 0d52087eca825a14a932bf0f50730832, type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2198529442404733915, guid: 0d52087eca825a14a932bf0f50730832, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

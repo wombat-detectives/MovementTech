@@ -653,7 +653,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1843237387}
+  m_Mesh: {fileID: 163827898}
 --- !u!33 &27108126
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -35188,7 +35188,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 886152957}
+  m_Mesh: {fileID: 852813493}
 --- !u!33 &1887219709
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -38823,6 +38823,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SFXManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1968058701689444381, guid: 75b4256a4ce43094f98582261fea7405, type: 3}
+      propertyPath: musicClip
+      value: 
+      objectReference: {fileID: 8300000, guid: db8aca1645fbf9c40a362252ca694d34, type: 3}
     - target: {fileID: 2167083141381946858, guid: 75b4256a4ce43094f98582261fea7405, type: 3}
       propertyPath: m_LocalPosition.x
       value: -309.76782

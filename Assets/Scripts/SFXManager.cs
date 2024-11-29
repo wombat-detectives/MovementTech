@@ -83,6 +83,9 @@ public class SFXManager : MonoBehaviour
         //spawn in GameObject
         AudioSource audioSrc = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
 
+        //parent to transform
+        audioSrc.transform.parent = spawnTransform;
+
         //assign properties and play
         audioSrc.clip = clip;
         audioSrc.volume = volume;
@@ -100,6 +103,9 @@ public class SFXManager : MonoBehaviour
 
         //spawn in GameObject
         AudioSource audioSrc = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+
+        //parent to transform
+        audioSrc.transform.parent = spawnTransform;
 
         //assign properties and play
         audioSrc.clip = clips[rand];
