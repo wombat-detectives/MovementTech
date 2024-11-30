@@ -40,6 +40,12 @@ public static class GameMaster
     {
         SaveData data = SaveSystem.LoadGame();
 
+        if (data == null)
+        {
+            NewGame();
+            return;
+        }
+
         tutorialComplete = data.tutorialCompleted;
         keyCollectedStatus[0] = data.key0Collected;
         keyCollectedStatus[1] = data.key1Collected;
