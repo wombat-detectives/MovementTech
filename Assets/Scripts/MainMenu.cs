@@ -6,7 +6,22 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        LevelLoader.instance.LoadNextLevel();
+    }
+
+    public void NewGame()
+    {
+        GameMaster.NewGame();
+        LevelLoader.instance.LoadNextLevel();
+    }
+
+    public void LoadGame()
+    {
+        GameMaster.LoadGame();
+        if (GameMaster.tutorialComplete)
+            LevelLoader.instance.LoadLevelByString("HubWorld");
+        else
+            LevelLoader.instance.LoadNextLevel();
     }
 
     public void QuitGame()
