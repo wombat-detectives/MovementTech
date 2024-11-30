@@ -4,6 +4,8 @@ public class CoinCollectible : MonoBehaviour
 {
     CoinManager coinManager;
     public bool isCollected = false;
+    public AudioClip pickupSound;
+    public GameObject pickupEffect;
 
     private void Start()
     {
@@ -19,6 +21,9 @@ public class CoinCollectible : MonoBehaviour
             if (other != null)
             {
                 coinManager.AddCoin(1);
+                SFXManager.instance.PlaySFXClip(pickupSound, transform, 1);
+                GameObject particles = Instantiate(pickupEffect, transform.position, Quaternion.identity);
+                Destroy(particles, 2f);
                 setCollected(true);
             }
         }
