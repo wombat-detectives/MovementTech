@@ -1169,6 +1169,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SFXManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1968058701689444381, guid: 75b4256a4ce43094f98582261fea7405, type: 3}
+      propertyPath: musicClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3d9a1640af2bf524ea01dd4bfd2dc843, type: 3}
     - target: {fileID: 2167083141381946858, guid: 75b4256a4ce43094f98582261fea7405, type: 3}
       propertyPath: m_LocalPosition.x
       value: -309.76782
