@@ -163,3 +163,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCollected: 0
+  pickupSound: {fileID: 8300000, guid: cf1e083385270aa42822a6d93cd31412, type: 3}
+  pickupEffect: {fileID: 5283298441206145532, guid: 5ba8af890c7d2604f867c65300e5dd52, type: 3}
