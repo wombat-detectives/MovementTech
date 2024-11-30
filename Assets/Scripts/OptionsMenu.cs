@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour
 {
@@ -17,6 +16,32 @@ public class OptionsMenu : MonoBehaviour
         if (timer > 0f)
         {
             timer -= Time.deltaTime;
+        }
+    }
+
+    private void Awake()
+    {
+        Slider[] sliders = GetComponentsInChildren<Slider>();
+
+        foreach(Slider sl in sliders) {
+            Debug.Log(sl.name);
+            float currVol;
+            switch (sl.name)
+            {
+                case "MainVolumeSlider":
+                    audioMixer.GetFloat("masterVolume", out currVol);
+                    sl.value = Mathf.Pow(10f, currVol / 20);
+                    break;
+                case "SFXVolumeSlider":
+                    audioMixer.GetFloat("sfxVolume", out currVol);
+                    sl.value = Mathf.Pow(10f, currVol / 20);
+                    break;
+                case "MusicVolumeSlider":
+                    audioMixer.GetFloat("musicVolume", out currVol);
+                    sl.value = Mathf.Pow(10f, currVol / 20);
+                    break;
+
+            }
         }
     }
 
