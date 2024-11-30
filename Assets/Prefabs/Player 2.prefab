@@ -2900,7 +2900,7 @@ MonoBehaviour:
   grounded: 1
   maxSlopeAngle: 40
   velocityDisplay: {fileID: 0}
-  dashHUD: {fileID: 0}
+  dashDisplay: {fileID: 0}
   climbingScript: {fileID: 3983930016502544931}
   state: 5
   sliding: 0
@@ -3226,7 +3226,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 132c0663-5d10-4721-aec0-2f6aea8134f2
-    m_ActionName: 'UI/Pause[/Keyboard/escape]'
+    m_ActionName: 'UI/Pause[/Keyboard/escape,/XInputControllerWindows/start,/XInputControllerWindows1/start]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -3466,8 +3466,8 @@ GameObject:
   - component: {fileID: 4302669439369993704}
   - component: {fileID: 8665319395582449462}
   - component: {fileID: 6699742921558048346}
-  - component: {fileID: 4220942253556589477}
   - component: {fileID: 5648954520261130217}
+  - component: {fileID: 9014215477021310052}
   m_Layer: 0
   m_Name: MC_Model_Rigging 1.1
   m_TagString: Untagged
@@ -3561,7 +3561,29 @@ MonoBehaviour:
     animated: 1
   wind: {x: 0, y: 0, z: 0}
   debugDraw: 0
---- !u!114 &4220942253556589477
+--- !u!95 &5648954520261130217
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8331247542804109269}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: a280c029dfedd7147b052c326b6b2fc4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5973891a35aaaac4e859b240a7508ec0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9014215477021310052
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3588,28 +3610,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: dbd6ebf8333aa5547b708f8a1d45d8f7, type: 3}
   - {fileID: 8300000, guid: 555d31db8388b8c43b2fd032e722b139, type: 3}
   - {fileID: 8300000, guid: 661280378bc3a2a4b89df61cfa3ae1c9, type: 3}
---- !u!95 &5648954520261130217
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8331247542804109269}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: a280c029dfedd7147b052c326b6b2fc4, type: 2}
-  m_Controller: {fileID: 9100000, guid: 5973891a35aaaac4e859b240a7508ec0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8503765911681350745
 GameObject:
   m_ObjectHideFlags: 0
