@@ -47,4 +47,4 @@ MonoBehaviour:
   soundFXObject: {fileID: 8774679834177116856, guid: 5b60981cad1384540b64ddfad5f87bb4, type: 3}
   playMusic: 1
   musicSource: {fileID: 1692701694370335999, guid: 4d8b6f8848e9d9d48b83ce3bafed6cbf, type: 3}
-  musicClip: {fileID: 8300000, guid: db8aca1645fbf9c40a362252ca694d34, type: 3}
+  musicClip: {fileID: 8300000, guid: 58f27dc284584d04c8a73d6f1627d079, type: 3}
