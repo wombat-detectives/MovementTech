@@ -1078,7 +1078,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hubert's Quest
+  m_text: Super Hubert 64
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8345c3370d33b384f8338ef8babf39c0, type: 2}
   m_sharedMaterial: {fileID: 5947718684336552020, guid: 8345c3370d33b384f8338ef8babf39c0, type: 2}
