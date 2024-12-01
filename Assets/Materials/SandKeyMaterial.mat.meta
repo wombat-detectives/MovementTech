@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Materials/SandKeyMaterial.mat.meta
-guid: de077e93308278d46b23b61143046b8a
-NativeFormatImporter:
-========
-guid: 757e287ae163b894d9c0321e0eb05388
+<<<<<<<< HEAD:Assets/Animations/InGameKey.meta
+guid: e238d1896cc250746bb10e82f37be1b9
 folderAsset: yes
 DefaultImporter:
->>>>>>>> main:Assets/Animations/InGameKey.meta
+========
+guid: de077e93308278d46b23b61143046b8a
+NativeFormatImporter:
+>>>>>>>> origin/AnimationBranch:Assets/Materials/SandKeyMaterial.mat.meta
   externalObjects: {}
   mainObjectFileID: 2100000
   userData: 

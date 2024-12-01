@@ -1,14 +1,8 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Materials/SandKeyMaterial.mat.meta
-guid: 60ada67c3e5516a449d76145000204ec
-NativeFormatImporter:
-========
 guid: 757e287ae163b894d9c0321e0eb05388
 folderAsset: yes
 DefaultImporter:
->>>>>>>> main:Assets/Animations/InGameKey.meta
   externalObjects: {}
-  mainObjectFileID: 2100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
