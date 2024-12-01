@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic; // For Queue
 
 public class WellLogic : MonoBehaviour
 {
@@ -9,10 +10,21 @@ public class WellLogic : MonoBehaviour
     private bool shouldLower = false;
     private Vector3 targetPosition;
 
+    private Queue<Vector3> positionQueue = new Queue<Vector3>(); // Queue to store pending target positions
+    private BoxCollider boxCollider; // Reference to the BoxCollider
+
     private void Start()
     {
         // Initialize the target position
         targetPosition = transform.parent.position;
+
+        // Get the BoxCollider attached to this object
+        boxCollider = GetComponent<BoxCollider>();
+
+        if (boxCollider == null)
+        {
+            Debug.LogWarning("No BoxCollider found on the WellLogic object.");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,8 +38,23 @@ public class WellLogic : MonoBehaviour
             if (currentGoldenSandManCount <= maxGoldenSandMan)
             {
                 // Calculate the new target position
-                targetPosition = transform.parent.position - new Vector3(0, lowerAmount / maxGoldenSandMan, 0);
-                shouldLower = true;
+                Vector3 newTargetPosition = transform.parent.position - new Vector3(0, lowerAmount / maxGoldenSandMan, 0);
+
+                // Add the new target position to the queue
+                positionQueue.Enqueue(newTargetPosition);
+
+                // If no lowering operation is currently active, start lowering
+                if (!shouldLower)
+                {
+                    ProcessNextLowering();
+                }
+
+                // Disable the BoxCollider if all "GoldenSandMan" objects are collected
+                if (currentGoldenSandManCount == maxGoldenSandMan && boxCollider != null)
+                {
+                    boxCollider.enabled = false;
+                    Debug.Log("All GoldenSandMan collected. BoxCollider disabled.");
+                }
             }
         }
     }
@@ -47,7 +74,20 @@ public class WellLogic : MonoBehaviour
             if (transform.parent.position == targetPosition)
             {
                 shouldLower = false;
+
+                // Process the next target position in the queue
+                ProcessNextLowering();
             }
+        }
+    }
+
+    private void ProcessNextLowering()
+    {
+        if (positionQueue.Count > 0)
+        {
+            // Get the next target position from the queue
+            targetPosition = positionQueue.Dequeue();
+            shouldLower = true;
         }
     }
 }
