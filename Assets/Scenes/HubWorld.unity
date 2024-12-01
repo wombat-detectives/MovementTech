@@ -32016,7 +32016,7 @@ PrefabInstance:
     - target: {fileID: 1713291733537984418, guid: af2c0adc52b734c5981034c839b600d5, type: 3}
       propertyPath: m_text
       value: (Unfortunately our castle level didn't make the final cut for the Game
-        Jam. But please play our beach and desert levels accessible in this hub!)
+        Jam. But please play our island and desert levels accessible in this hub!)
       objectReference: {fileID: 0}
     - target: {fileID: 2769620367512834020, guid: af2c0adc52b734c5981034c839b600d5, type: 3}
       propertyPath: m_Name
