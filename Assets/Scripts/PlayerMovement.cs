@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public Vector2 move;
     public bool canMove = true;
+   
     private Vector3 moveDir;
     private float turnSmoothVel;
     public readonly float expectedFramerate = 60f;
