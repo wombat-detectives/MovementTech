@@ -4,21 +4,49 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Text.RegularExpressions;
 
+
 public class KeyHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public TMP_Text timeText; // Reference for displaying time
-    public TMP_Text nameText; // Reference for displaying name
-    private bool KeySelectedBool = false; // Tracks if the key has been selected
-    private Animator animator; // Reference to the dynamic animator
-    private Button currentButton; // Tracks the current Button being interacted with
+    public TMP_Text timeText;
+    public TMP_Text nameText;
+    private bool KeySelectedBool = false;
+    private Animator animator;
+    private Button currentButton;
+
+    [SerializeField] private AudioClip keyAudioClip; // Clip to be used
+    [SerializeField] private AudioSource audioSource; // Dedicated audio source
+
+    private void Awake()
+    {
+        // Ensure the cursor is visible and unlocked
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // Find the MusicPlayer object in the scene
+        GameObject musicPlayerObject = FindMusicPlayer();
+        if (musicPlayerObject != null)
+        {
+            AudioSource musicPlayerAudio = musicPlayerObject.GetComponent<AudioSource>();
+            if (musicPlayerAudio != null)
+            {
+                ReplaceMusicPlayerAudio(musicPlayerAudio, keyAudioClip);
+            }
+            else
+            {
+                Debug.LogWarning("MusicPlayer found, but no AudioSource component is attached.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No MusicPlayer object found in the scene.");
+        }
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Detect the hovered GameObject
         GameObject hoveredObject = eventData.pointerEnter;
         if (hoveredObject == null) return;
 
-        // Get the Button component dynamically
         currentButton = hoveredObject.GetComponent<Button>();
         if (currentButton == null)
         {
@@ -27,11 +55,8 @@ public class KeyHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
 
         Debug.Log($"Hovered over button: {currentButton.name}");
-
-        // Subscribe to the Button's onClick event
         currentButton.onClick.AddListener(HandleButtonClick);
 
-        // Update TextMeshPro with KeyInfo
         KeyInfo keyInfo = hoveredObject.GetComponent<KeyInfo>();
         if (keyInfo != null)
         {
@@ -39,7 +64,6 @@ public class KeyHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             nameText.text = keyInfo.GetName();
         }
 
-        // Handle animations dynamically
         int keyIndex = ExtractKeyIndex(hoveredObject.name);
         if (keyIndex != -1)
         {
@@ -59,7 +83,6 @@ public class KeyHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Unsubscribe from the current Button's onClick event
         if (currentButton != null)
         {
             currentButton.onClick.RemoveListener(HandleButtonClick);
@@ -84,11 +107,44 @@ public class KeyHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             animator.CrossFade("KeySelect", 0.2f);
             Debug.Log("KeySelect animation triggered.");
         }
+
+        if (audioSource != null && keyAudioClip != null)
+        {
+            audioSource.PlayOneShot(keyAudioClip);
+            Debug.Log("Audio clip played through the audio source.");
+        }
+    }
+
+    private void ReplaceMusicPlayerAudio(AudioSource musicPlayerAudio, AudioClip newClip)
+    {
+        if (musicPlayerAudio.clip != newClip)
+        {
+            musicPlayerAudio.clip = newClip;
+            musicPlayerAudio.Play();
+            Debug.Log("MusicPlayer audio source updated and playing new clip.");
+        }
+        else
+        {
+            Debug.Log("MusicPlayer is already using the new clip.");
+        }
     }
 
     private int ExtractKeyIndex(string objectName)
     {
         Match match = Regex.Match(objectName, @"\d+");
         return match.Success ? int.Parse(match.Value) : -1;
+    }
+
+    private GameObject FindMusicPlayer()
+    {
+        GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in objects)
+        {
+            if (obj.name.Contains("MusicPlayer"))
+            {
+                return obj;
+            }
+        }
+        return null;
     }
 }

@@ -5,11 +5,11 @@ using UnityEngine;
 public static class GameMaster
 {
 
-    public static float[] times = new float[4];
+    public static float[] times = new float[5];
 
     //Save Data
     public static bool tutorialComplete;
-    public static bool[] keyCollectedStatus = new bool[4];
+    public static bool[] keyCollectedStatus = new bool[5];
     public static int coins = 0;
 
     public static void NewGame()
@@ -51,13 +51,14 @@ public static class GameMaster
         keyCollectedStatus[1] = data.key1Collected;
         keyCollectedStatus[2] = data.key2Collected;
         keyCollectedStatus[3] = data.key3Collected;
-
+        keyCollectedStatus[4] = data.key4Collected;
         coins = data.coins;
 
         times[0] = data.key0Time;
         times[1] = data.key1Time;
         times[2] = data.key2Time;
         times[3] = data.key3Time;
+        times[4] = data.key4Time;
     }
 
 }
