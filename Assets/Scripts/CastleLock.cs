@@ -18,18 +18,12 @@ public class CastleLock : MonoBehaviour
             }
         }
 
-        if (numKeys < 4) 
+        if (numKeys < 5) 
         {
-            text.text = numKeys.ToString() + "/4 keys";
+            text.text = numKeys.ToString() + "/5 keys";
         } else
         {
             text.text = "you beat the game yippee";
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
