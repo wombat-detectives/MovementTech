@@ -22,23 +22,17 @@ public class KeyHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Find the MusicPlayer object in the scene
+        // Find and disable the MusicPlayer in the scene
         GameObject musicPlayerObject = FindMusicPlayer();
         if (musicPlayerObject != null)
         {
             AudioSource musicPlayerAudio = musicPlayerObject.GetComponent<AudioSource>();
             if (musicPlayerAudio != null)
             {
-                ReplaceMusicPlayerAudio(musicPlayerAudio, keyAudioClip);
+                musicPlayerAudio.clip = null; // Clear the MusicPlayer audio clip
+                musicPlayerAudio.Stop();
+                Debug.Log("MusicPlayer audio stopped and cleared.");
             }
-            else
-            {
-                Debug.LogWarning("MusicPlayer found, but no AudioSource component is attached.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No MusicPlayer object found in the scene.");
         }
     }
 
@@ -112,20 +106,6 @@ public class KeyHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             audioSource.PlayOneShot(keyAudioClip);
             Debug.Log("Audio clip played through the audio source.");
-        }
-    }
-
-    private void ReplaceMusicPlayerAudio(AudioSource musicPlayerAudio, AudioClip newClip)
-    {
-        if (musicPlayerAudio.clip != newClip)
-        {
-            musicPlayerAudio.clip = newClip;
-            musicPlayerAudio.Play();
-            Debug.Log("MusicPlayer audio source updated and playing new clip.");
-        }
-        else
-        {
-            Debug.Log("MusicPlayer is already using the new clip.");
         }
     }
 

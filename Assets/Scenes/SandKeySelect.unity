@@ -513,7 +513,7 @@ MonoBehaviour:
   timeText: {fileID: 1905442776}
   nameText: {fileID: 1514777478}
   keyAudioClip: {fileID: 8300000, guid: 7895acc995b3b684bb825fb77d34ad43, type: 3}
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 203152642}
 --- !u!1 &340930558
 GameObject:
   m_ObjectHideFlags: 0
