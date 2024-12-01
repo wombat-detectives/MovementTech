@@ -6,6 +6,7 @@ public class SaveData
     public bool key1Collected;
     public bool key2Collected;
     public bool key3Collected;
+    public bool key4Collected;
 
     public int coins;
 
@@ -13,6 +14,7 @@ public class SaveData
     public float key1Time;
     public float key2Time;
     public float key3Time;
+    public float key4Time;
 
     public SaveData()
     {
@@ -28,6 +30,7 @@ public class SaveData
         key1Time = GameMaster.times[1];
         key2Time = GameMaster.times[2];
         key3Time = GameMaster.times[3];
+        key4Time = GameMaster.times[4];
     }
 
 }
