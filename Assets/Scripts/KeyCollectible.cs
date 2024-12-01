@@ -4,8 +4,6 @@ using System.Collections;
 using Unity.Cinemachine;
 
 
-
-
 public class KeyCollectible : MonoBehaviour
 {
     public int keyID;
@@ -17,23 +15,28 @@ public class KeyCollectible : MonoBehaviour
     [SerializeField] private CinemachineCamera cinemachineCamera;
 
     [SerializeField] private CinemachineInputAxisController inputAxisController;
-    [SerializeField] private Transform player; // Reference to the player transform
+    [SerializeField] private Transform player;
 
-    // Public variables to control camera behavior
     public float cameraDistance = 5f;
-    public Vector3 cameraOffset = new Vector3(0, 2, 0); // Offset to keep the camera above the player
-    public float playerRotationOffset = -90f; // Additional rotation for the player
+    public Vector3 cameraOffset = new Vector3(0, 2, 0);
+    public float playerRotationOffset = -90f;
+
+    [SerializeField] private AudioClip keyPickupClip; // Variable audio clip for key pickup
+    [SerializeField] private string targetSceneName = "HubWorld"; // Name of the scene to load
+    [SerializeField] private float sceneLoadDelay = 3.0f; // Delay before loading the scene
+
+    private MeshRenderer[] meshRenderers;
 
     private void Awake()
     {
         timer = FindObjectOfType<Timer>();
+        meshRenderers = GetComponentsInChildren<MeshRenderer>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Key pickup logic
             GameMaster.CollectKey(keyID);
             CoinManager.instance.SaveCoins();
 
@@ -42,7 +45,6 @@ public class KeyCollectible : MonoBehaviour
 
             GameMaster.SaveGame();
 
-            // Disable player input
             if (playerInputObject != null)
             {
                 var inputComponent = playerInputObject.GetComponent<PlayerInput>();
@@ -57,51 +59,102 @@ public class KeyCollectible : MonoBehaviour
                 }
             }
 
-            // Disable camera input
             if (inputAxisController != null)
             {
                 inputAxisController.enabled = false;
                 Debug.Log("Camera input disabled.");
             }
 
-            // Play key pickup animation
             if (playerAnimations != null)
             {
                 playerAnimations.PlayKeyPickupAnimation();
             }
 
-            // Enable root motion for animator
             if (animator != null)
             {
                 animator.applyRootMotion = true;
             }
 
-            // Adjust the camera to ensure direct line of sight and rotate the player
             if (cinemachineCamera != null && player != null)
             {
-                // Adjust the near clipping plane
                 cinemachineCamera.Lens.NearClipPlane = 1f;
-
-                // Start transition coroutine
                 StartCoroutine(AdjustCameraForCenteredView());
             }
 
-            // Destroy the key object
-            Destroy(gameObject);
-            Debug.Log("Key object destroyed.");
+            HandleMusicPlayer(); // New logic for handling music player
+            HideKey();
+            StartCoroutine(WaitAndLoadScene());
         }
     }
 
+    private void HandleMusicPlayer()
+    {
+        // Find the music player object by searching for a name containing "MusicPlayer"
+        GameObject musicPlayerObject = FindMusicPlayer();
+
+        if (musicPlayerObject != null)
+        {
+            AudioSource musicPlayer = musicPlayerObject.GetComponent<AudioSource>();
+            if (musicPlayer != null)
+            {
+                Debug.Log("Replacing music player's audio with key pickup music.");
+
+                // Stop the current music
+                musicPlayer.Stop();
+
+                // Replace the clip with key pickup clip if desired
+                musicPlayer.clip = keyPickupClip;
+
+                // Optionally loop the new clip if it's meant to be background music
+                musicPlayer.loop = true;
+
+                // Play the new clip
+                musicPlayer.Play();
+            }
+            else
+            {
+                Debug.LogWarning("No AudioSource component found on the MusicPlayer object.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No object with name containing 'MusicPlayer' found in the scene.");
+        }
+    }
+
+    private GameObject FindMusicPlayer()
+    {
+        GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in objects)
+        {
+            if (obj.name.Contains("MusicPlayer") && obj.GetComponent<AudioSource>() != null)
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    private void HideKey()
+    {
+        if (meshRenderers != null)
+        {
+            foreach (var renderer in meshRenderers)
+            {
+                renderer.enabled = false;
+            }
+        }
+
+        Debug.Log("Key visuals hidden.");
+    }
 
     private IEnumerator AdjustCameraForCenteredView()
     {
         float transitionDuration = 1.5f;
         float elapsedTime = 0f;
 
-        // Rotate the player instantly before starting the camera adjustment
         RotatePlayerToFaceCamera();
 
-        // Store initial camera properties
         Vector3 initialPosition = cinemachineCamera.transform.position;
         Vector3 targetPosition = CalculateCameraPosition(player.position);
 
@@ -113,61 +166,50 @@ public class KeyCollectible : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / transitionDuration;
 
-            // Smoothly interpolate the camera's position
             cinemachineCamera.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
-
-            // Smoothly interpolate the FOV
             cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(initialFOV, targetFOV, t);
-
-            // Make the camera look at the player
             cinemachineCamera.transform.LookAt(player.position + cameraOffset);
 
             yield return null;
         }
 
-        // Ensure the final position, FOV, and rotation are set
         cinemachineCamera.transform.position = targetPosition;
         cinemachineCamera.Lens.FieldOfView = targetFOV;
         cinemachineCamera.transform.LookAt(player.position + cameraOffset);
 
-        Debug.Log("Camera adjustment complete with centered view and vertical FOV set to 45.");
-
-        // Do NOT re-enable camera input
-        Debug.Log("Camera input remains disabled.");
+        Debug.Log("Camera adjustment complete.");
     }
 
+    private IEnumerator WaitAndLoadScene()
+    {
+        Debug.Log($"Waiting for {sceneLoadDelay} seconds before loading the scene...");
+        yield return new WaitForSeconds(sceneLoadDelay);
+
+        Debug.Log($"Loading scene: {targetSceneName}");
+        LevelLoader.instance.LoadLevelByString(targetSceneName);
+    }
 
     private void RotatePlayerToFaceCamera()
     {
         if (player != null && cinemachineCamera != null)
         {
-            // Calculate the direction from the player to the camera
             Vector3 directionToCamera = cinemachineCamera.transform.position - player.position;
-            directionToCamera.y = 0; // Keep rotation only on the horizontal plane
+            directionToCamera.y = 0;
 
-            // Calculate the rotation to face the camera
             Quaternion targetRotation = Quaternion.LookRotation(-directionToCamera);
-
-            // Apply additional rotation offset
             Quaternion rotationOffset = Quaternion.Euler(0, playerRotationOffset, 0);
             targetRotation *= rotationOffset;
 
-            // Instantly rotate the player to the target rotation
             player.rotation = targetRotation;
         }
     }
 
-
     private Vector3 CalculateCameraPosition(Vector3 playerPosition)
     {
-        // Calculate the direction vector from the camera to the player
         Vector3 directionToPlayer = (playerPosition - cinemachineCamera.transform.position).normalized;
-
-        // Adjust the camera's Y-axis to match the player's ground level
         Vector3 adjustedCameraPosition = playerPosition - directionToPlayer * cameraDistance + cameraOffset;
-        adjustedCameraPosition.y = playerPosition.y; // Set Y-axis to match player's Y
+        adjustedCameraPosition.y = playerPosition.y;
 
         return adjustedCameraPosition;
     }
-
 }
