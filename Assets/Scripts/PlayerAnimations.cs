@@ -1,12 +1,11 @@
 using UnityEngine;
-using System.Collections; // Required for IEnumerator and Coroutines
 using Debug = UnityEngine.Debug;
-
+using System.Collections;
 public class PlayerAnimations : MonoBehaviour
 {
     private Animator animator;
     [HideInInspector] public string currentAnimation = "";
-    private bool isKeyPickupAnimationPlaying = false; // Lock for key pickup animation
+    private bool isKeyPickupActive = false; // Flag to track if KeyPickup animation is active
 
     void Start()
     {
@@ -15,7 +14,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlaySlideAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Slide")
+        if (currentAnimation != "Slide" && !isKeyPickupActive)
         {
             animator.Play("Slide", 1);
             currentAnimation = "Slide";
@@ -24,31 +23,18 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayKeyPickupAnimation()
     {
-        if (!isKeyPickupAnimationPlaying)
-        {
-            isKeyPickupAnimationPlaying = true; // Lock animation state
-            animator.Play("KeyPickupAnim", 1);
-
-            // Start a coroutine to unlock after the animation ends
-            StartCoroutine(UnlockKeyPickupAnimation());
-        }
+        // Set the flag to true and play the KeyPickupAnim
+        isKeyPickupActive = true;
+        animator.Play("KeyPickupAnim", 1);
+        currentAnimation = "KeyPickupAnim";
+    
     }
 
-    private IEnumerator UnlockKeyPickupAnimation()
-    {
-        // Wait until the KeyPickupAnim animation finishes
-        yield return new WaitUntil(() =>
-        {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1); // Layer 1
-            return stateInfo.IsName("KeyPickupAnim") && stateInfo.normalizedTime >= 1.0f;
-        });
-
-        isKeyPickupAnimationPlaying = false; // Unlock after animation
-    }
+   
 
     public void PlayIdleAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Idle" && currentAnimation != "Jump")
+        if (currentAnimation != "Idle" && currentAnimation != "Jump" && !isKeyPickupActive)
         {
             if (currentAnimation == "FallShort" || currentAnimation == "FallLong")
             {
@@ -63,51 +49,48 @@ public class PlayerAnimations : MonoBehaviour
         }
     }
 
-    public void PlayWallrunAnimation()
+    public void PlayIdleCrouchAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Wallrun")
+        if (!isKeyPickupActive)
         {
-            animator.Play("Wallrun", 1);
-            currentAnimation = "Wallrun";
+            // Implement crouch logic
         }
     }
 
-    public void PlayClimbAnimation()
+    public void PlayCrouchWalkAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Climb")
+        if (!isKeyPickupActive)
+        {
+            // Implement crouch walk logic
+        }
+    }
+
+    public void PlayWallrunAnimation()
+    {
+        if (currentAnimation != "Climb" && !isKeyPickupActive)
         {
             animator.Play("Climb", 1);
             currentAnimation = "Climb";
         }
     }
 
-    public void PlayAirAnimation()
+    public void PlayClimbAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Air")
+        if (currentAnimation != "Climb" && !isKeyPickupActive)
         {
-            animator.CrossFade("Air", 0.2f, 1);
-            currentAnimation = "Air";
-        }
-    }
-
-    public void PlayRunAnimation()
-    {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Run")
-        {
-            Debug.Log("Run animation called");
-            animator.CrossFade("Run", 0.2f, 1);
-            currentAnimation = "Run";
+            animator.Play("Climb", 1);
+            currentAnimation = "Climb";
         }
     }
 
     public void PlayFallShortAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "FallShort")
+        if (currentAnimation != "FallShort" && !isKeyPickupActive)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1); // Layer 1
             if (stateInfo.normalizedTime >= 1.0f && !stateInfo.IsName("FallShort"))
             {
-                animator.CrossFade("FallShort", 0.2f, 1); // Play FallShort after current animation finishes
+                animator.CrossFade("FallShort", 0.2f, 1);
                 currentAnimation = "FallShort";
             }
         }
@@ -115,20 +98,37 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayFallLongAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "FallLong")
+        if (currentAnimation != "FallLong" && !isKeyPickupActive)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(1); // Layer 1
             if (stateInfo.normalizedTime >= 1.0f && !stateInfo.IsName("FallLong"))
             {
-                animator.CrossFade("FallLong", 0.2f, 1); // Play FallLong after current animation finishes
+                animator.CrossFade("FallLong", 0.2f, 1);
                 currentAnimation = "FallLong";
             }
         }
     }
 
+    public void PlayAirAnimation()
+    {
+        if (!isKeyPickupActive)
+        {
+            PlayJumpAnimation();
+        }
+    }
+
+    public void PlayRunAnimation()
+    {
+        if (!isKeyPickupActive && currentAnimation != "Run" && currentAnimation != "Jump" && currentAnimation != "Lunge")
+        {
+            animator.CrossFade("Run", 0.2f, 1);
+            currentAnimation = "Run";
+        }
+    }
+
     public void PlayDashAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Dash")
+        if (!isKeyPickupActive && currentAnimation != "Dash")
         {
             animator.CrossFade("Dash", 0.2f, 2);
             currentAnimation = "Dash";
@@ -137,7 +137,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayLungeAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Lunge")
+        if (!isKeyPickupActive && currentAnimation != "Lunge")
         {
             animator.CrossFade("Lunge", 0.2f, 1);
             currentAnimation = "Lunge";
@@ -146,7 +146,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayJumpAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "Jump")
+        if (!isKeyPickupActive && currentAnimation != "Jump")
         {
             animator.Play("Jump", 1);
             currentAnimation = "Jump";
@@ -155,15 +155,15 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayLandJumpAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "LandJump")
+        if (!isKeyPickupActive && currentAnimation != "LandJump")
         {
             if (currentAnimation == "FallShort" || currentAnimation == "FallLong")
             {
-                animator.CrossFade("LandJump", 0.05f, 2); 
+                animator.CrossFade("LandJump", 0.05f, 2);
             }
             else
             {
-                animator.CrossFade("LandJump", 0.2f, 2); 
+                animator.CrossFade("LandJump", 0.2f, 2);
             }
 
             currentAnimation = "LandJump";
@@ -172,7 +172,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void PlayWallKickAnimation()
     {
-        if (!isKeyPickupAnimationPlaying && currentAnimation != "WallKick")
+        if (!isKeyPickupActive && currentAnimation != "WallKick")
         {
             animator.CrossFade("WallKick", 0.2f, 1);
             currentAnimation = "WallKick";
