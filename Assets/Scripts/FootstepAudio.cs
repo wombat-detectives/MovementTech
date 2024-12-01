@@ -13,10 +13,10 @@ public class FootstepAudio : MonoBehaviour
 
     public enum footstepTypes
     {
+        Untagged,
         Grass,
         Brick,
-        Prop,
-        Untagged
+        Prop
     }
 
     private AudioClip[] activeFootsteps;
