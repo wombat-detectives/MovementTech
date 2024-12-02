@@ -4,6 +4,10 @@ using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Coyote Time")]
+    [SerializeField] private float coyoteTime = 0.2f;
+    private float coyoteTimeCounter;
+
     public Vector2 move;
     public bool canMove = true;
    
@@ -139,6 +143,16 @@ public class PlayerMovement : MonoBehaviour
         bool previouslyGrounded = grounded;
         grounded = Physics.Raycast(rb.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
 
+        // Coyote time countdown
+        if (grounded)
+        {
+            coyoteTimeCounter = coyoteTime; // Reset the coyote time when grounded
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime; // Decrease the counter when not grounded
+        }
+
         // Track if the player is in the air and not climbing
         if (!grounded && !climbing)
         {
@@ -178,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // When to jump
-        if (jumpInput > 0 && readyToJump && grounded)
+        if (jumpInput > 0 && readyToJump && coyoteTimeCounter > 0)
         {
             readyToJump = false;
             Jump();
