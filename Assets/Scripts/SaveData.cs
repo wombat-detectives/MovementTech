@@ -23,6 +23,7 @@ public class SaveData
         key1Collected = GameMaster.keyCollectedStatus[1];
         key2Collected = GameMaster.keyCollectedStatus[2];
         key3Collected = GameMaster.keyCollectedStatus[3];
+        key4Collected = GameMaster.keyCollectedStatus[4];
 
         coins = GameMaster.coins;
 
