@@ -57,6 +57,10 @@ public class CoinManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        coinText.text = "x " + coinCount.ToString();
+        if (coinText != null)
+        {
+
+            coinText.text = "x " + coinCount.ToString();
+        }
     }
 }

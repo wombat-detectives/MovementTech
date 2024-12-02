@@ -184,7 +184,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: KeyPickupAnim
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -222,7 +222,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7a5b743295ecaf24b8e0c795e9f159e5, type: 2}
+  m_Motion: {fileID: 7400000, guid: fba1b336dcb0d064c821ab580aa2aead, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -607,7 +607,7 @@ AnimatorStateMachine:
     m_Position: {x: 730, y: -280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3034732335026194878}
-    m_Position: {x: 620.48737, y: -336.1048, z: 0}
+    m_Position: {x: 620, y: -340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3913660365213134931}
     m_Position: {x: 320, y: -310, z: 0}
